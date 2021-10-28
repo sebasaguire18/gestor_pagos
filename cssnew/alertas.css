@@ -1,0 +1,35 @@
+.mes_true{
+    color: rgb(12, 170, 47);
+    font-size: 25px;
+}
+.mes_false{
+    color: rgb(228, 23, 23);
+    font-size: 25px;
+}
+.mes_warning{
+    color: rgb(218, 198, 18);
+    font-size: 25px;
+}
+.volver{
+    text-align: center;
+    margin: auto;
+    font-size: 23px;
+}
+
+/* para la tabla de los usuarios */
+.tableUsuarios{
+    width: 98%;
+    margin: auto;
+    text-align: center;
+    color: beige;
+    border: 1px solid black;
+}
+.tableUsuarios td{
+    padding: 5px;
+    border: 1px solid black;
+}
+.title{
+    color: rgb(255, 255, 255);
+    font-weight: bolder;
+    background: rgba(255, 255, 255, 0.096);
+}

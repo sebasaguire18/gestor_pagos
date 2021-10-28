@@ -1,0 +1,5 @@
+TRUNCATE TABLE balance;
+TRUNCATE TABLE extendloan;
+TRUNCATE TABLE inicio;
+TRUNCATE TABLE new_user;
+TRUNCATE TABLE payment;

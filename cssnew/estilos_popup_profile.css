@@ -1,0 +1,29 @@
+.btn-popup-enla{
+    background: rgba(0,0,0,.05);
+    display: block;
+    text-align: center;
+    padding: 10px 15px;
+}
+.btn-popup-enla:hover{
+    background: rgba(0,0,0,.15);
+}
+.content_enlaces a:nth-child(1){
+    border-radius: 3px 3px 0px 0px;    
+}
+.content_enlaces a:nth-child(5){
+    border-radius: 0px 0px 3px 3px;
+}
+.btn-popup-enla button{
+    background: none;
+    color: #000;
+    outline: none;
+    transition: .3s ease all;
+    cursor: pointer;
+    border: none;}
+.btn-closesesion{
+    background: rgba(230, 3, 8, 0.6);
+
+}
+.btn-closesesion:hover{
+    background: rgba(230, 3, 8, 0.4);
+}

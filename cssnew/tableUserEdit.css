@@ -1,0 +1,28 @@
+
+/* para la tabla de los usuarios a editar */
+.tableUserEdit{
+    width: 98%;
+    margin: auto;
+    text-align: center;
+    color: rgb(27, 27, 20);
+    border: 1px solid black;
+}
+.tableUserEdit td{
+    padding: 5px;
+    border: 1px solid black;
+}
+.titleEdit{
+    color: rgb(14, 9, 9);
+    font-weight: bolder;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.tdactive{
+    background: rgba(122, 228, 117, 0.6);
+}
+.tdinactive{
+    background:rgba(235, 117, 117, 0.6);
+}
+#tdpendiente{
+    background: rgba(255, 235, 53, 0.6);
+}
