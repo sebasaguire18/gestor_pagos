@@ -19,10 +19,13 @@
 
 .tdactive{
     background: rgba(122, 228, 117, 0.6);
+    color: white;
 }
 .tdinactive{
     background:rgba(235, 117, 117, 0.6);
+    color: white;
 }
 #tdpendiente{
     background: rgba(255, 235, 53, 0.6);
+    color: white;
 }

@@ -26,4 +26,10 @@
 
 	<!-- Modernizr JS -->
 	<script src="../js/modernizr-2.6.2.min.js"></script>
+	<script src="../js/popper.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../datatables/datatables.min.css"/>
+
+	
+
+
 

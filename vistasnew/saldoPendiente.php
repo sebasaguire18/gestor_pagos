@@ -102,7 +102,7 @@
 									<tr>
 										<td class="titleEdit">Nombre</td>
 										<td class="titleEdit">Dirección</td>
-										<td class="titleEdit">Duda</td>
+										<td class="titleEdit">Resta</td>
 									</tr>
 									<?php 
 											// consultar los pagos

@@ -18,3 +18,38 @@
 	<!-- PopUp -->
 	<script src="../js/popup.js"></script>
 
+	<!-- data tables -->
+	<script src="../datatables/dataTables.bootstrap4.min.js"></script>
+	
+	<script>
+        $(document).ready(function() {
+			// cargar tabla de lista de usuarios
+			$('#table1').DataTable({
+				"language": {
+					"url": "../datatables/Spanish.json"
+				},
+				responsive: "true",
+			});
+
+			// cargar tabla de lista de precios
+            $('#tbListaPrecios').DataTable({
+                "language": {
+                    "url": "../datatables/Spanish.json"
+                },
+                responsive: "true",
+            });
+		});
+	</script>
+	<!-- data tables -->
+	<script type="text/javascript" src="../datatables/datatables.min.js"></script>
+	<script type="text/javascript" src="../datatables/JSZip-2.5.0/jszip.min.js"></script>
+	<script type="text/javascript" src="../datatables/pdfmake-0.1.36/pdfmake.min.js"></script>
+	<script type="text/javascript" src="../datatables/pdfmake-0.1.36/vfs_fonts.js"></script>
+	<script type="text/javascript" src="../datatables/DataTables-1.10.24/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="../datatables/DataTables-1.10.24/js/dataTables.bootstrap4.min.js"></script>
+	<script type="text/javascript" src="../datatables/Buttons-1.7.0/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" src="../datatables/Buttons-1.7.0/js/buttons.bootstrap4.min.js"></script>
+	<script type="text/javascript" src="../datatables/Buttons-1.7.0/js/buttons.html5.min.js"></script>
+	<script type="text/javascript" src="../datatables/Buttons-1.7.0/js/buttons.print.min.js"></script>
+	
+	<script src="../js/popper.min.js"></script>

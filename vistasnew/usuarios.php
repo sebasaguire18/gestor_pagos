@@ -1,6 +1,7 @@
 <?php 
 
   include '../php/conexion-bd.php';
+  include '../function/funciones.php';
   include '../function/select_usuario.php';
   include '../function/select_usuario_ex.php';
   include '../function/select_notifications.php';
@@ -198,45 +199,25 @@
 					<div class="gtco-section">
 						<h3 class="tittle_form2">Usuarios de la plataforma</h3>
 						<p>¡Recuerda tratar los datos de forma segura!</p>
-						<table class="tableUsuarios">
-							<tr>
-								<td class="title">Nombre</td>
-								<td class="title">Tipo de Usuario</td>
-								<td class="title">Estado</td>
-							</tr>
-						<?php
-							while($mostrar_UE=mysqli_fetch_Array($ejecut_consultaUE2)){
-						?>
-							<tr>
-								<td><?php echo $mostrar_UE['name'];?></td>
-						<?php
-							if ($mostrar_UE['id_roll']==1) {
-								$tipo_user="Administrador";
-							}elseif ($mostrar_UE['id_roll']==2) {
-								$tipo_user="Cobrador";
-							}elseif ($mostrar_UE['id_roll']==3) {
-								$tipo_user="Deudor";
-							}if ($mostrar_UE['status'] == 1) {
-								$status='<td class="tdactive"><span class="icon-check"></span></td>';
-							}elseif ($mostrar_UE['status'] == 0)  {
-								$status='<td class="tdinactive"><span class="icon-cross"></span></td>';
-							}
-							// Para habilitar el editar el usuer
-						?>
-								<td><?php echo $tipo_user; ?></td>
-								<?php echo $status;?>
-						<?php
-								if($mostrar_usu['id_roll']==1){
-						?>
-								<td><a href="../php/editUser.php?id_user=<?php echo $mostrar_UE['id_user'];?>"><span class="icon-creative-commons-share"></span></a></td>
-                        <?php		
-							    }
-						?>
-							</tr>
-						<?php		
-							}
-						?>
-						</table>
+
+						<div class="table-responsive-xl"> 
+					
+							<table id="tbListaPrecios" class="table table-striped text-white">
+								<thead class="thead-dark text-center">
+									<tr>
+										<th scope="col">Nombre</th>
+										<th scope="col">Rol</th>
+										<th scope="col">Estado</th>
+										<th scope="col"></th>
+									</tr>
+								</thead>
+								<tbody class="text-center">
+									<?php
+										consultarUsuariosLista(3);
+									?>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
