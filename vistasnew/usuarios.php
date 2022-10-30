@@ -64,7 +64,7 @@
   	<?php 
 		if ($mostrar_usu['id_roll']==1) {
 	?>
-		<header id="gtco-header" class="gtco-cover gtco-cover-xs" role="banner" style="background-image:url(../images/image_bg_1.jpg);">
+		<header id="gtco-header" class="gtco-cover gtco-cover-xs" role="banner" style="background-image:url(../images/backDinero.png);">
 				<div class="overlay"></div>
 				<div class="gtco-container">
 					<div class="row">
@@ -171,7 +171,7 @@
 	<?php
 		}elseif ($mostrar_usu['id_roll']==2) {
 	?>
-			<header id="gtco-header" class="gtco-cover gtco-cover-xs" role="banner" style="background-image:url(../images/image_bg_1.jpg);">
+			<header id="gtco-header" class="gtco-cover gtco-cover-xs" role="banner" style="background-image:url(../images/backDinero.png);">
 				<div class="overlay"></div>
 				<div class="gtco-container">
 					<div class="row">
