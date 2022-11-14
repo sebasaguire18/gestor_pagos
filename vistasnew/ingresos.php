@@ -58,7 +58,7 @@
       
     </div>
   </nav>
-			<header id="gtco-header" class="gtco-cover gtco-cover-xs" role="banner" style="background-image:url(../images/backDinero.png);">
+			<header id="gtco-header" class="gtco-cover gtco-cover-xs" role="banner" style="background-image:url(../images/backDinero2.png);">
 				<div class="overlay"></div>
 				<div class="gtco-container">
 					<div class="row">

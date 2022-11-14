@@ -18,6 +18,7 @@
 							<a class="btn-popup-enla" href="../vistasnew/solicitudes.php"><button>Solicitudes Nuevo Cliente <span class="label label-warning"><?php echo $solicitudes;?></span></button></a>
 							<!-- <a class="btn-popup-enla" href="reportes.php?id_user=<?php  $id_user;?>"><button>Reportes</button></a> -->
 							<a class="btn-popup-enla" href="../vistasnew/ampliarPrestamo.php"><button>Solicitudes Ampliar Prestamo <span class="label label-warning"><?php echo $solicitudesAP;?></span></button></a>
+							<a class="btn-popup-enla" href="../vistasnew/ciudades.php"><button>Cuidades</button></a>
 						<?php	
 						}
 						?>

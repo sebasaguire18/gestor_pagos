@@ -58,7 +58,7 @@
       
     </div>
   </nav>
-		<header id="gtco-header" class="gtco-cover gtco-cover-xs" role="banner" style="background-image:url(../images/backDinero.png);">
+		<header id="gtco-header" class="gtco-cover gtco-cover-xs" role="banner" style="background-image:url(../images/backDinero2.png);">
 				<div class="overlay"></div>
 				<div class="gtco-container">
 					<div class="row">
@@ -85,16 +85,33 @@
 							<div class="col-md-12">
 								<input type="text" id="name" name="name" class="form-control" placeholder="Nombre y Apellido">
 							</div>
-							
-						</div>
-						<div class="row form-group">
-							<div class="col-md-12">
-								<input type="text" id="text" name="address" class="form-control" placeholder="Dirección del Usuario">
-							</div>
 						</div>
 						<div class="row form-group">
 							<div class="col-md-12">
 								<input type="text" id="nitUser" name="nitUser" class="form-control" placeholder="Identificación">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-12">
+								<input type="text" id="address" name="address" class="form-control" placeholder="Dirección del Usuario">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-12">
+								<select class="form-control" name="city_usu" id="city_usu">
+									<option value="0">Seleccionar Ciudad...</option>
+								<?php
+									// consultar las ciudades disponibles para prestar
+									$consultaCitys="SELECT * FROM citys WHERE city_status = 1";
+									$ejecut_consultaCitys=mysqli_query($conexion,$consultaCitys);
+									
+									while($mostrar_Citys=mysqli_fetch_Array($ejecut_consultaCitys)){
+								?>
+									<option value="<?php echo $mostrar_Citys['city_id'] ?>"><?php echo $mostrar_Citys['city_name'] ?></option>
+								<?php		
+									}
+								?>
+								</select>
 							</div>
 						</div>
 						<div class="row form-group">
@@ -104,7 +121,22 @@
 						</div>
 						<div class="row form-group">
 							<div class="col-md-12">
+								<input type="text" id="fiador" name="fiador" class="form-control" placeholder="Fiador">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-12">
 								<input type="text" id="quantity" name="quantity" class="form-control" placeholder="Cantidad de dinero a solicitar sin puntos (.) ni comas (,)">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-12">
+								<input type="text" id="tipo_cred" name="tipo_cred" class="form-control" placeholder="Tipo de Crédito">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-12">
+								<input type="text" id="cuotas_cred" name="cuotas_cred" class="form-control" placeholder="Cuotas">
 							</div>
 						</div>
 						<div class="form-group">
