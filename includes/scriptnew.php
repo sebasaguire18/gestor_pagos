@@ -38,6 +38,14 @@
                 },
                 responsive: "true",
             });
+
+			// cargar tabla de ciudades
+            $('#tbCiudades').DataTable({
+                "language": {
+                    "url": "../datatables/Spanish.json"
+                },
+                responsive: "true",
+            });
 		});
 	</script>
 	<!-- data tables -->

@@ -105,10 +105,12 @@
                 		}elseif ($mostrar_UDT['status'] == 2)  {
 									$statusUDT='<td class="tdinactive">Rechazada</td>';
 						}	
-						if ($mostrar_UDTI['status'] == 1) {
-									$statusUDTI='<td class="tdactive">Activo</td>';
-						}elseif ($mostrar_UDTI['status'] == 0)  {
-									$statusUDTI='<td class="tdinactive">Inactivo</td>';
+						if ($validarUsuarioDTI==1) {
+							if ($mostrar_UDTI['status'] == 1) {
+								$statusUDTI='<td class="tdactive">Activo</td>';
+							}elseif ($mostrar_UDTI['status'] == 0)  {
+										$statusUDTI='<td class="tdinactive">Inactivo</td>';
+							}
 						}
                         if ($mostrar_UDT['status'] == 1 || $mostrar_UDT['status']==2) {
                 ?>

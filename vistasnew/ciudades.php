@@ -16,7 +16,7 @@
   <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Usuarios</title>
+  <title>Ciudades</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Free HTML5 Website Template by gettemplates.co" />
   <meta name="keywords" content="free website templates, free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive" />
@@ -80,42 +80,20 @@
 				</div>
 			</header>
 
-  	<div class="gtco-section">
+  <div class="gtco-section">
 		<div class="gtco-container">
 			<div class="row row-pb-md">
 				<div class="col-md-6 animate-box">
-					<h3 class="tittle_form1">Formulario para crear Ciudades</h3>
+					<h3 class="tittle_form1">Formulario para crear ciudades</h3>
 					<p>¡Recuerda llenar bien todos los campos!</p>
-					<form action="#" method="POST">
+					<form method="POST">
 						<div class="row form-group">
 							<div class="col-md-12">
-								<input type="text" id="name" name="name" class="form-control" placeholder="Nombre y Apellido">
-							</div>
-							
-						</div>
-
-						<div class="row form-group">
-							<div class="col-md-12">
-								<input type="text" id="email" name="email" class="form-control" placeholder="Correo para iniciar sesión">
-							</div>
-						</div>
-
-						<div class="row form-group">
-							<div class="col-md-12">
-								<input type="text" id="pass" name="pass" class="form-control" placeholder="Contraseña">
-							</div>
-						</div>
-						<div class="row form-group">
-							<div class="col-md-12">
-								<select class="form-control" name="tipoUser" id="tipoUser">
-									<option value="1">Administrador</option>
-									<option value="2">Cobrador</option>
-									<option value="3">Deudor</option>
-								</select>
+								<input type="text" id="nameCity" name="nameCity" class="form-control" placeholder="Nombre de la ciudad">
 							</div>
 						</div>
 						<div class="form-group">
-							<input type="submit" name="btnRegistrar" value="Registrar Usuario" class="btn btn-success btn-lg">
+							<input type="submit" name="btnRegistrarCiudad" value="Registrar Usuario" class="btn btn-success btn-lg">
 						</div>
 					</form>		
 				</div>
@@ -124,36 +102,35 @@
 							<h3>Validación de Datos</h3>
 							<!-- Validación si existe un usuario o no -->
 							<?php 
-							if (isset($_POST['btnRegistrar'])) {
-								$name=$_POST['name'];
-								$email=$_POST['email'];
-								$pass=$_POST['pass'];
-								$tipoUser=$_POST['tipoUser'];
-								if ($name=="" || $email=="" || $pass=="" || $tipoUser=="") {
+							if (isset($_POST['btnRegistrarCiudad'])) {
+								$nameCity=$_POST['nameCity'];
+								if ($nameCity=="") {
 							?>
 								<p class="mes_false"><span class="icon-warning"> </span>¡Recuerda llenar todos los campos!</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
 							<?php
 								}else{	
 
-									$validarUsuario="SELECT * FROM inicio WHERE email='$email'";
-									$ejecut_validarU=mysqli_query($conexion,$validarUsuario);
-									$row=mysqli_num_rows($ejecut_validarU);
+									$validarCiudad="SELECT * FROM citys WHERE city_name='$nameCity'";
+									$ejecut_validarC=mysqli_query($conexion,$validarCiudad);
+									$row=mysqli_num_rows($ejecut_validarC);
+
+									$idCityNew = uniqid();
 
 									if ($row==1) {
 							?>
-										<p class="mes_false"><span class="icon-remove-user"> </span>Correo o usuario existente.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
+										<p class="mes_false"><span class="icon-remove-user"> </span>Ciudad existente.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
 							<?php
 									}else{
-										$insertU="INSERT INTO inicio(name,email,pass,id_roll) VALUES('$name','$email','$pass','$tipoUser')";
-										$ejecut_insertU=mysqli_query($conexion,$insertU);
+										$insertCiudad="INSERT INTO citys(city_id,city_name) VALUES('$idCityNew','$nameCity')";
+										$ejecut_insertCiudad=mysqli_query($conexion,$insertCiudad);
 										
-										if ($ejecut_insertU) {
+										if ($ejecut_insertCiudad) {
 							?>
-										<p class="mes_true"><span class="icon-check"> </span>Usuario Creado exitosamente.</p>
+										<p class="mes_true"><span class="icon-check"> </span>Ciudad Creada exitosamente.</p>
 							<?php		
 										}else{
 							?>
-										<p class="mes_false"><span class="icon-warning"> </span>Error al crear el usuario.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
+										<p class="mes_false"><span class="icon-warning"> </span>Error al crear la Ciudad.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
 							<?php		
 										}
 									}
@@ -167,7 +144,38 @@
 			</div>
 		</div>
 	</div>
-	<?php 
+	
+	<div id="gtco-subscribe">
+		<div class="gtco-container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 text-center">
+					<div class="gtco-section">
+						<h3 class="tittle_form2">Usuarios de la plataforma</h3>
+						<p>¡Recuerda tratar los datos de forma segura!</p>
+
+						<div class="table-responsive-xl"> 
+							<table id="tbCiudades" class="table table-striped text-white">
+								<thead class="thead-dark text-center">
+									<tr>
+										<th scope="col">ID</th>
+										<th scope="col">Nombre</th>
+										<th scope="col">Estado</th>
+										<th scope="col"></th>
+									</tr>
+								</thead>
+								<tbody class="text-center">
+									<?php
+										consultarCiudadLista(3);
+									?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>		
+	<?php
 		}
 	?>
     <?php include '../includes/footer.php'; ?>

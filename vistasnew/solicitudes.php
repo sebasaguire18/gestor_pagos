@@ -4,6 +4,7 @@
   include '../function/select_usuario.php';
   include '../function/select_usuario_ex.php';
   include '../function/select_notifications.php';
+  include '../function/funciones.php';
 
   if($_SESSION['usuario']){
                 $nombre=$_SESSION['usuario'];
@@ -82,11 +83,11 @@
 					<p>¡Recuerda verificar bien todos los campos!</p>
 					<hr>
 					<?php
-						if (isset($_POST['btnHabilitar'])) {
+						if (isset($_POST['btnHabilitarU'])) {
 							$UserEdit=$_POST['UserEdit'];
 
 							// traer datos del usuario nuevo de la tabla new_user
-							$consultaUN="SELECT * FROM new_user WHERE id_newuser='$UserEdit'";
+							$consultaUN="SELECT * FROM new_user WHERE id_newuser = '$UserEdit'";
 							$ejecut_consultaUN=mysqli_query($conexion,$consultaUN);
 							$mostrar_UN=mysqli_fetch_Array($ejecut_consultaUN);
 							$verifConsultUN=mysqli_num_rows($ejecut_consultaUN);
@@ -114,19 +115,25 @@
 								<div class="row form-group">
 									<div class="col-md-12">
 										<label for="name">Nombre:</label>
-										<input type="text" disabled id="name" class="form-control" value="<?php echo $mostrar_UN['name']; ?>">
-									</div>
-								</div>
-								<div class="row form-group">
-									<div class="col-md-12">
-										<label for="address">Dirección:</label>
-										<input type="text" disabled id="address" name="address" class="form-control" value="<?php echo $mostrar_UN['address']; ?>">
+										<input type="text" disabled class="form-control" value="<?php echo $mostrar_UN['name']; ?>">
 									</div>
 								</div>
 								<div class="row form-group">
 									<div class="col-md-12">
 										<label for="nit_user">Identificación del Usuario:</label>
-										<input type="text" disabled id="nit_user" name="nit_user" class="form-control" value="<?php echo $mostrar_UN['nit_user']; ?>">
+										<input type="text" disabled class="form-control" value="<?php echo $mostrar_UN['nit_user']; ?>">
+									</div>
+								</div>
+								<div class="row form-group">
+									<div class="col-md-12">
+										<label for="address">Dirección:</label>
+										<input type="text" disabled class="form-control" value="<?php echo $mostrar_UN['address']; ?>">
+									</div>
+								</div>
+								<div class="row form-group">
+									<div class="col-md-12">
+										<label for="address">Ciudad:</label>
+										<input type="text" disabled class="form-control" value="<?php consultarNombreCiudad($mostrar_UN['city']); ?>">
 									</div>
 								</div>
 								<div class="row form-group">
@@ -137,13 +144,19 @@
 								</div>
 								<div class="row form-group">
 									<div class="col-md-12">
-										<label for="nit_user">Cantidad que el Usuario requiere:</label>
-										<input type="text" disabled class="form-control" value="$ <?php echo $mostrar_UN['quantity']; ?>">
+										<label for="nit_user">Fiador</label>
+										<input type="text" disabled class="form-control" value="<?php echo $mostrar_UN['phone_user']; ?>">
 									</div>
 								</div>
 								<div class="row form-group">
 									<div class="col-md-12">
-										<label for="nit_user">Fecha:</label>
+										<label for="nit_user">Cantidad que el Usuario requiere:</label>
+										<input type="text" disabled class="form-control" value="$ <?php echo formatoAPrecio($mostrar_UN['quantity']); ?>">
+									</div>
+								</div>
+								<div class="row form-group">
+									<div class="col-md-12">
+										<label for="nit_user">Fecha solicitud:</label>
 										<input type="text" disabled class="form-control" value="<?php echo $date; ?>">
 									</div>
 								</div>
@@ -173,7 +186,7 @@
 									<select class="form-control" name="UserEdit" id="UserEdit">
 										<option value="0">Seleccionar...</option>
 									<?php
-										$consultaUD="SELECT * FROM new_user WHERE status=0 ORDER BY id_newuser ASC";
+										$consultaUD="SELECT * FROM new_user WHERE status = 0";
 										$ejecut_consultaUD=mysqli_query($conexion,$consultaUD);
 										while($mostrar_UD=mysqli_fetch_Array($ejecut_consultaUD)){
 									?>
@@ -185,7 +198,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<input type="submit" name="btnHabilitar" value="Traer datos del usuario" class="btn btn-success btn-outline btn-lg">
+								<input type="submit" name="btnHabilitarU" value="Traer datos del usuario" class="btn btn-success btn-outline btn-lg">
 							</div>
 						</form>
 					<?php

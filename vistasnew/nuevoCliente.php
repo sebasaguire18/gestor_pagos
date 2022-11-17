@@ -4,6 +4,7 @@
   include '../function/select_usuario.php';
   include '../function/select_usuario_ex.php';
   include '../function/select_notifications.php';
+  include '../function/funciones.php';
 
   if($_SESSION['usuario']){
                 $nombre=$_SESSION['usuario'];
@@ -100,17 +101,7 @@
 							<div class="col-md-12">
 								<select class="form-control" name="city_usu" id="city_usu">
 									<option value="0">Seleccionar Ciudad...</option>
-								<?php
-									// consultar las ciudades disponibles para prestar
-									$consultaCitys="SELECT * FROM citys WHERE city_status = 1";
-									$ejecut_consultaCitys=mysqli_query($conexion,$consultaCitys);
-									
-									while($mostrar_Citys=mysqli_fetch_Array($ejecut_consultaCitys)){
-								?>
-									<option value="<?php echo $mostrar_Citys['city_id'] ?>"><?php echo $mostrar_Citys['city_name'] ?></option>
-								<?php		
-									}
-								?>
+									<?php consultarCiudadesSelect(1); ?>
 								</select>
 							</div>
 						</div>
@@ -121,7 +112,10 @@
 						</div>
 						<div class="row form-group">
 							<div class="col-md-12">
-								<input type="text" id="fiador" name="fiador" class="form-control" placeholder="Fiador">
+								<select class="form-control" name="fiadorUser" id="fiadorUser">
+									<option value="0">Sin fiador</option>
+									<?php consultarUsuariosSelect(1); ?>
+								</select>
 							</div>
 						</div>
 						<div class="row form-group">
@@ -139,8 +133,13 @@
 								<input type="text" id="cuotas_cred" name="cuotas_cred" class="form-control" placeholder="Cuotas">
 							</div>
 						</div>
-						<div class="form-group">
-							<input type="submit" name="btnSolicitar" value="Solicitar Usuario" class="btn btn-success btn-lg">
+						<div class="row form-group">
+							<div class="col-md-12">
+								<input type="text" id="nota_cred" name="nota_cred" class="form-control" placeholder="Nota adicional">
+							</div>
+						</div>
+						<div class="form-group dp-flex jfy-ctn-center">
+							<input type="submit" name="btnSolicitarCred" value="Solicitar Usuario" class="btn btn-success btn-lg">
 						</div>
 					</form>		
 				</div>
@@ -149,15 +148,20 @@
 							<h3>Validación de Datos</h3>
 							<!-- Validación si existe un usuario o no -->
 							<?php 
-							if (isset($_POST['btnSolicitar'])) {
+							if (isset($_POST['btnSolicitarCred'])) {
 								$name=$_POST['name'];
-								$address=$_POST['address'];
 								$nitUser=$_POST['nitUser'];
+								$address=$_POST['address'];
+								$city_usu=$_POST['city_usu'];
 								$phoneUser=$_POST['phoneUser'];
+								$fiadorUser=$_POST['fiadorUser'];
 								$quantity=$_POST['quantity'];
+								$tipo_cred=$_POST['tipo_cred'];
+								$cuotas_cred=$_POST['cuotas_cred'];
+								$nota_cred=$_POST['nota_cred'];
 
 								
-								if ($name=="" || $address=="" || $nitUser=="" || $phoneUser=="" || $quantity=="") {
+								if ($name=="" || $nitUser=="" || $address=="" || $city_usu=="" || $phoneUser=="" || $fiadorUser=="" || $quantity=="" || $tipo_cred=="" || $cuotas_cred=="" || $nota_cred=="") {
 							?>
 								<div class="alert alert-danger text-center">
 									<p><span class="icon-warning"> </span>¡Recuerda llenar todos los campos!</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
@@ -175,7 +179,10 @@
 							<?php
 									}else{
 										// insertar usuario Deudor
-										$insertUD="INSERT INTO new_user(name,address,nit_user,phone_user,quantity) VALUES('$name','$address','$nitUser','$phoneUser','$quantity')";
+										
+										$idNewUser = uniqid();
+
+										$insertUD="INSERT INTO new_user(id_newuser,name,nit_user,address,city,phone_user,fiador,quantity,tipo_credito,cuotas_credito,nota) VALUES('$idNewUser','$name','$nitUser','$address','$city_usu','$phoneUser','$fiadorUser','$quantity','$tipo_cred','$cuotas_cred','$nota_cred')";
 										$ejecut_insertUD=mysqli_query($conexion,$insertUD);
 										
 										if ($ejecut_insertUD) {
