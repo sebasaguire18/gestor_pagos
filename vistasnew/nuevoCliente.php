@@ -161,22 +161,47 @@
 								$nota_cred=$_POST['nota_cred'];
 
 								
-								if ($name=="" || $nitUser=="" || $address=="" || $city_usu=="" || $phoneUser=="" || $fiadorUser=="" || $quantity=="" || $tipo_cred=="" || $cuotas_cred=="" || $nota_cred=="") {
+								if ($name=="" || $nitUser=="" || $address=="" || $city_usu=="" || $phoneUser=="" || $fiadorUser=="" || $quantity=="" || $tipo_cred=="" || $cuotas_cred=="") {
 							?>
 								<div class="alert alert-danger text-center">
 									<p><span class="icon-warning"> </span>¡Recuerda llenar todos los campos!</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
                                 </div>
 							<?php
 								}else{	
-									// Validar si el usuario existe por su número de identificación
-									$validarUsuarioD="SELECT * FROM new_user WHERE nit_user='$nitUser'";
+									// Validar si el usuario existe por su número de identificación y esta en estado pendiente
+									$validarUsuarioD="SELECT * FROM new_user WHERE nit_user='$nitUser' AND status = 0";
 									$ejecut_validarUD=mysqli_query($conexion,$validarUsuarioD);
 									$row=mysqli_num_rows($ejecut_validarUD);
 
+									// Validar si el usuario existe por su número de identificación y esta en estado rechazada y,
+									// con esto solo cambiar el monto o fiador o cuotas.
+									$validarUsuarioD2="SELECT * FROM new_user WHERE nit_user='$nitUser' AND status = 2";
+									$ejecut_validarUD2=mysqli_query($conexion,$validarUsuarioD2);
+									$filaValid=mysqli_num_rows($ejecut_validarUD2);
+
 									if ($row==1) {
 							?>
-										<p class="mes_false"><span class="icon-remove-user"> </span>usuario existente o solicitud ya enviada.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
+										<div class="alert alert-danger text-center">
+											<p><span class="icon-remove-user"> </span>usuario existente o solicitud pendiente.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
+										</div>
 							<?php
+									}elseif($filaValid == 1){
+										$actualizarSolicitud = mysqli_query($conexion,"UPDATE new_user SET fiador = '$fiadorUser', quantity = '$quantity', tipo_credito = '$tipo_cred', cuotas_credito = '$cuotas_cred', nota = '$nota_cred', date = NOW(), status = 0 WHERE nit_user = '$nitUser'");
+										
+										if ($actualizarSolicitud) {
+							?>
+										<div class="alert alert-success text-center">
+											<p><span class="icon-check"> </span>Usuario solicitado nuevamente exitosamente.</p>
+										</div>
+							<?php		
+										}else{
+							?>
+										<div class="alert alert-danger text-center">
+											<p><span class="icon-warning"> </span>Error al solicitar el usuario nuevamente.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
+										</div>
+							<?php		
+										}
+
 									}else{
 										// insertar usuario Deudor
 										
@@ -187,11 +212,15 @@
 										
 										if ($ejecut_insertUD) {
 							?>
-										<p class="mes_true"><span class="icon-check"> </span>Usuario solicitado exitosamente.</p>
+										<div class="alert alert-success text-center">
+											<p><span class="icon-check"> </span>Usuario solicitado exitosamente.</p>
+										</div>
 							<?php		
 										}else{
 							?>
-										<p class="mes_false"><span class="icon-warning"> </span>Error al solicitar el usuario.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
+										<div class="alert alert-danger text-center">
+											<p><span class="icon-warning"></span>Error al solicitar el usuario.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
+										</div>
 							<?php		
 										}
 									}

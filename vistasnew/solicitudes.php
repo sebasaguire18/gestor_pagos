@@ -99,7 +99,10 @@
 
 							if ($verifConsultUN==0) {
 					?>
-								<p class="mes_false"><span class="icon-remove-user"> </span>Correo o usuario no existente o hubo un error.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
+								<hr>
+								<div class="alert alert-danger text-center">
+									<p><span class="icon-remove-user"> </span>Correo o usuario no existente o hubo un error.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
+								</div>
 					<?php
 							}else{
 					?>	
@@ -144,14 +147,32 @@
 								</div>
 								<div class="row form-group">
 									<div class="col-md-12">
-										<label for="nit_user">Fiador</label>
-										<input type="text" disabled class="form-control" value="<?php echo $mostrar_UN['phone_user']; ?>">
+										<label for="nit_user">Fiador:</label>
+										<input type="text" disabled class="form-control" value="<?php consultarNombreUsuario($mostrar_UN['fiador']); ?>">
 									</div>
 								</div>
 								<div class="row form-group">
 									<div class="col-md-12">
 										<label for="nit_user">Cantidad que el Usuario requiere:</label>
 										<input type="text" disabled class="form-control" value="$ <?php echo formatoAPrecio($mostrar_UN['quantity']); ?>">
+									</div>
+								</div>
+								<div class="row form-group">
+									<div class="col-md-12">
+										<label for="nit_user">Tipo de crédito:</label>
+										<input type="text" disabled class="form-control" value="<?php echo $mostrar_UN['tipo_credito']; ?>">
+									</div>
+								</div>
+								<div class="row form-group">
+									<div class="col-md-12">
+										<label for="nit_user">Cantidad de cuotas:</label>
+										<input type="text" disabled class="form-control" value="<?php echo $mostrar_UN['cuotas_credito']; ?>">
+									</div>
+								</div>
+								<div class="row form-group">
+									<div class="col-md-12">
+										<label for="nit_user">Nota:</label>
+										<input type="text" disabled class="form-control" value="<?php echo $mostrar_UN['nota']; ?>">
 									</div>
 								</div>
 								<div class="row form-group">
@@ -208,13 +229,186 @@
 					<div class="col-md-5 col-md-push-1 animate-box">
 						<div class="gtco-contact-info">
 							<h3>Validación de Datos</h3>
-								<table class="tableUserEdit">
-									<tr>
-										<td class="titleEdit">id</td>
-										<td class="titleEdit">Nombre</td>
-										<td class="titleEdit">Identificación</td>
-										<td class="titleEdit">Estado</td>
-									</tr>
+								<?php
+									if (isset($_POST['btnUserNew'])){
+										$id_newuser=$_POST['id_newuser'];
+										$name=$_POST['name'];
+										$status=$_POST['status'];
+										if ($status==2) {
+								?>		
+										<hr>
+										<div class="alert alert-warning text-center">
+											<p>Favor menciona el ¿Porqué? has rechazado la solicitud.</p>
+										</div>
+										<form action="#" method="POST">
+											<div class="row form-group">
+												<div class="col-md-12">
+													<label for="name">La razón es:</label>
+													<input type="text" id="why" name="why" class="form-control" placeholder="Éste es un porque!">
+												</div>
+											</div>
+											<input type="hidden" name="id_newuser" value="<?php echo $id_newuser; ?>">
+											<div class="form-group">
+												<input type="submit" name="btnRUN" value="Enviar Reporte" class="btn btn-success btn-outline btn-lg">
+												<a href="javascript:history.go(-2);" class="btn btn-warning btn-outline btn-lg">Retroceder</a>
+											</div>
+										</form>
+								<?php
+										}elseif ($status==1) {
+											?>		
+											<hr>
+											<div class="alert alert-warning text-center">
+												<p>¿Deseas aprobar y habilitar el usuario?</p>
+											</div>
+											<form action="#" method="POST">
+												<input type="hidden" name="id_newuser" value="<?php echo $id_newuser; ?>">
+												
+												<div class="row form-group">
+													<div class="col-md-12">
+														<label for="name">El nombre será:</label>
+														<input type="text" id="name" name="name" class="form-control" value="<?php echo $name; ?>">
+													</div>
+												</div>
+												<div class="form-group">
+													<input type="submit" name="btnReisUserNew" value="Aprobar y registrar" class="btn btn-success btn-outline btn-lg">
+													<a href="javascript:history.go(-2);" class="btn btn-warning btn-outline btn-lg">Retroceder</a>
+												</div>
+											</form>
+								<?php		
+											
+										}elseif ($status==0) {
+								?>
+											<hr>
+											<div class="alert alert-warning text-center">
+												<p>El usuario no se modificó y sigue con el estado actual.</p>
+											</div>
+											<form action="#" method="POST">
+												<div class="form-group">
+													<input type="submit" name="btnDejarIgual" value="Cargar las nuevas solicitudes" class="btn btn-success btn-outline btn-lg">
+													<a href="javascript:history.go(-2);" class="btn btn-warning btn-outline btn-lg">Retroceder</a>
+												</div>
+											</form>
+								<?php
+										}
+
+									}
+										// ---------------------  guardo datos del usuario Sí el administrador aprueba la solicitud.
+											if (isset($_POST['btnReisUserNew'])) {
+												$id_newuser=$_POST['id_newuser'];
+												$name=$_POST['name'];
+												$tipoUser=3;
+												$statusN=1;
+
+												
+												// actualizar el estado del usuario nuevo o new user
+												$updateStatusNU="UPDATE new_user SET status='$statusN' WHERE id_newuser='$id_newuser'";
+												$ejecut_updateStatusNU=mysqli_query($conexion,$updateStatusNU);
+
+
+												if ($ejecut_updateStatusNU) {
+													// consultar datos en la tabla de newuser los datos del usuario nuevo
+													$consultaUN="SELECT * FROM new_user WHERE id_newuser='$id_newuser'";
+													$ejecut_consultaUN=mysqli_query($conexion,$consultaUN);
+													$mostrar_UN=mysqli_fetch_Array($ejecut_consultaUN);
+											
+													// consultar el id del usuario en la tabla de balance (Saldo) para ver si ya está insertado
+													$consultaIUI="SELECT * FROM balance WHERE id_newuser='$id_newuser'";
+													$ejecut_consultaIUI=mysqli_query($conexion,$consultaIUI);
+													$validarUB=mysqli_num_rows($ejecut_consultaIUI);
+
+													if ($validarUB == 0) {
+													
+														// datos
+														$idBalance = uniqid();
+														$address=$mostrar_UN['address'];
+														$nitUser=$mostrar_UN['nit_user'];
+														$phoneUser=$mostrar_UN['phone_user'];
+														$quantity=$mostrar_UN['quantity'];	
+														$interests=$quantity*0.2;
+														$total_quantity=$quantity+$interests;
+													
+														// insertar el saldo a prestar del usuario
+														$insertSU="INSERT INTO balance(id_balance,id_newuser,name,address,nit_user,phone_user,quantity,interests,total_quantity) VALUES('$idBalance','$id_newuser','$name','$address','$nitUser','$phoneUser','$quantity','$interests','$total_quantity')";
+														$ejecut_insertSU=mysqli_query($conexion,$insertSU);
+														
+														if ($ejecut_insertSU) {
+														
+								?>
+															<hr>
+															<div class="alert alert-success text-center">
+																<p><span class="icon-check"> </span>Usuario Creado exitosamente.</p><a class="volver" href="../vistasnew/solicitudes.php">OK</a>
+															</div>
+								<?php					
+														}else{
+								?>
+															<hr>
+															<div class="alert alert-danger text-center">
+																<p><span class="icon-warning"> </span>Error al crear el usuario.</p><a class="volver" href="javascript:history.go(-2);">Volver</a>
+															</div>
+								<?php		
+														}
+													}else{
+								?>
+														<hr>
+														<div class="alert alert-danger text-center">
+															<p><span class="icon-remove-user"> </span>Correo o usuario existente.</p><a class="volver" href="javascript:history.go(-3);">Volver</a>
+														</div>
+								<?php	
+													}
+												}else{
+								?>
+													<hr>
+													<div class="alert alert-danger text-center">
+														<p><span class="icon-warning"> </span>Error al crear el usuario.</p><a class="volver" href="javascript:history.go(-2);">Volver</a>
+													</div>
+								<?php	 	
+												}
+											}elseif (isset($_POST['btnRUN'])) {
+												//------------------------- si el administrador rechaza la solicitud.
+												$id_newuser=$_POST['id_newuser'];
+												$why=$_POST['why'];
+												$statusWhy=2;
+												
+
+												if ($why=="") {
+								?>
+													<hr>
+													<div class="alert alert-success text-center">
+														<p><span class="icon-remove-user"> </span>Llena por favor el campo requerido.</p><a class="volver" href="javascript:history.go(-3);">Volver</a>
+													</div>
+								<?php
+												}else{
+													
+													// actualizar el por que del usuario nuevo o new user
+													$updateStatusWhy="UPDATE new_user SET why_refuse='$why', status='$statusWhy' WHERE id_newuser='$id_newuser'";
+													$ejecut_updateStatusWhy=mysqli_query($conexion,$updateStatusWhy);
+
+													if ($ejecut_updateStatusWhy){
+								?>
+													<hr>
+													<div class="alert alert-success text-center">
+														<p><span class="icon-check"></span>Estado del usuario Actualizado exitosamente.<a class="volver" href="../vistasnew/solicitudes.php">OK</a></p>
+													</div>
+													
+								<?php		
+													}else{
+								?>
+													<hr>
+													<div class="alert alert-danger text-center">
+														<p><span class="icon-warning"> </span>Error al crear el usuario.</p><a class="volver" href="javascript:history.go(-2);">Volver</a>
+													</div>
+								<?php		
+													}
+												}
+											}
+								?>
+							<table class="tableUserEdit">
+								<tr>
+									<td class="titleEdit">id</td>
+									<td class="titleEdit">Nombre</td>
+									<td class="titleEdit">Identificación</td>
+									<td class="titleEdit">Estado</td>
+								</tr>
 								<?php
 								// consultar los usuarios existentes deudores UsuarioDeudor
 									$consultaUD="SELECT * FROM new_user";
@@ -248,183 +442,7 @@
 								<?php		
 									}
 								?>
-								</table>
-								<?php
-									if (isset($_POST['btnUserNew'])){
-										$id_newuser=$_POST['id_newuser'];
-										$name=$_POST['name'];
-										$status=$_POST['status'];
-										if ($status==2) {
-								?>		
-										<hr>
-										<p class="mes_false">Favor menciona el ¿Porqué? has rechazado la solicitud.</p>
-										<form action="#" method="POST">
-											<div class="row form-group">
-												<div class="col-md-12">
-													<label for="name">La razón es:</label>
-													<input type="text" id="why" name="why" class="form-control" placeholder="Éste es un porque!">
-												</div>
-											</div>
-											<input type="hidden" name="id_newuser" value="<?php echo $id_newuser; ?>">
-											<div class="form-group">
-												<input type="submit" name="btnRUN" value="Enviar Reporte" class="btn btn-success btn-outline btn-lg">
-												<a href="javascript:history.go(-2);" class="btn btn-warning btn-outline btn-lg">Retroceder</a>
-											</div>
-										</form>
-								<?php
-										}elseif ($status==1) {
-											?>		
-											<hr>
-											<p class="mes_true">Favor llena atentamente los campos para habilitar el usuario.</p>
-											<form action="#" method="POST">
-												<input type="hidden" name="id_newuser" value="<?php echo $id_newuser; ?>">
-												
-												<div class="row form-group">
-													<div class="col-md-12">
-														<label for="name">El nombre será:</label>
-														<input type="text" id="name" name="name" class="form-control" value="<?php echo $name; ?>">
-													</div>
-												</div>
-												<div class="row form-group">
-													<div class="col-md-12">
-														<label for="name">Correo para iniciar sesión:</label>
-														<input type="text" id="email" name="email" class="form-control" placeholder="correo@mail.com">
-													</div>
-												</div>
-												
-												<div class="row form-group">
-													<div class="col-md-12">
-														<label for="name">contraseña</label>
-														<input type="text" id="pass" name="pass" class="form-control" placeholder="Contraseña">
-													</div>
-												</div>
-												<div class="form-group">
-													<input type="submit" name="btnReisUserNew" value="Registrar usuario" class="btn btn-success btn-outline btn-lg">
-													<a href="javascript:history.go(-2);" class="btn btn-warning btn-outline btn-lg">Retroceder</a>
-												</div>
-											</form>
-								<?php		
-											
-										}elseif ($status==0) {
-								?>
-											<hr>
-											<p class="mes_false">El usuario no se modificó y sigue con el estado actual.</p>
-											<form action="#" method="POST">
-												<div class="form-group">
-													<input type="submit" name="btnDejarIgual" value="Cargar las nuevas solicitudes" class="btn btn-success btn-outline btn-lg">
-													<a href="javascript:history.go(-2);" class="btn btn-warning btn-outline btn-lg">Retroceder</a>
-												</div>
-											</form>
-								<?php
-										}
-
-									}
-										// ---------------------  guardo datos en inicio del usuario SI el administrador aprueba la solicitud.
-											if (isset($_POST['btnReisUserNew'])) {
-												$id_newuser=$_POST['id_newuser'];
-												$name=$_POST['name'];
-												$email=$_POST['email'];
-												$pass=$_POST['pass'];
-												$tipoUser=3;
-												$statusN=1;
-												$validarUsuario="SELECT * FROM inicio WHERE email='$email'";
-												$ejecut_validarU=mysqli_query($conexion,$validarUsuario);
-												$row=mysqli_num_rows($ejecut_validarU);
-
-												if ($row==1) {
-								?>
-													<p class="mes_false"><span class="icon-remove-user"> </span>Correo o usuario existente.</p><a class="volver" href="javascript:history.go(-3);">Volver</a>
-								<?php
-												}else{
-													// insertar el usuario para el inicio de sesión
-													$insertUNew="INSERT INTO inicio(id_newuser,name,email,pass,id_roll) VALUES('$id_newuser','$name','$email','$pass','$tipoUser')";
-													$ejecut_insertUNew=mysqli_query($conexion,$insertUNew);
-													
-													// actualizar el estado del usuario nuevo o new user
-													$updateStatusNU="UPDATE new_user SET status='$statusN' WHERE id_newuser='$id_newuser'";
-													$ejecut_updateStatusNU=mysqli_query($conexion,$updateStatusNU);
-
-													
-
-													if ($ejecut_insertUNew && $ejecut_updateStatusNU) {
-														// consultar datos en la tabla de newuser los datos del usuario nuevo
-														$consultaUN="SELECT * FROM new_user WHERE id_newuser='$id_newuser'";
-														$ejecut_consultaUN=mysqli_query($conexion,$consultaUN);
-														$mostrar_UN=mysqli_fetch_Array($ejecut_consultaUN);
-														
-														// consultar el id del usuario en la tabla de inicio
-														$consultaIUI="SELECT * FROM inicio WHERE id_newuser='$id_newuser'";
-														$ejecut_consultaIUI=mysqli_query($conexion,$consultaIUI);
-														$mostrar_IUI=mysqli_fetch_Array($ejecut_consultaIUI);
-
-														// consultar el id del usuario en la tabla de balance (Saldo) para ver si ya está insertado
-														$consultaIUI="SELECT * FROM balance WHERE id_newuser='$id_newuser'";
-														$ejecut_consultaIUI=mysqli_query($conexion,$consultaIUI);
-														$validarUB=mysqli_num_rows($ejecut_consultaIUI);
-
-														if ($validarUB == 0) {
-														
-															// datos
-															$id_user=$mostrar_IUI['id_user'];
-															$address=$mostrar_UN['address'];
-															$nitUser=$mostrar_UN['nit_user'];
-															$phoneUser=$mostrar_UN['phone_user'];
-															$quantity=$mostrar_UN['quantity'];	
-															$interests=$quantity*0.1;
-														
-														// insertar el saldo a prestar del usuario
-														$insertSU="INSERT INTO balance(id_user,id_newuser,name,address,nit_user,phone_user,quantity,interests) VALUES('$id_user','$id_newuser','$name','$address','$nitUser','$phoneUser','$quantity','$interests')";
-														$ejecut_insertSU=mysqli_query($conexion,$insertSU);
-															if ($ejecut_insertSU) {
-															
-								?>
-																<p class="mes_true"><span class="icon-check"> </span>Usuario Creado exitosamente.<a class="volver" href="../vistasnew/solicitudes.php">OK</a></p>
-								<?php					
-															}else{
-								?>
-																<p class="mes_false"><span class="icon-warning"> </span>Error al crear el usuario.</p><a class="volver" href="javascript:history.go(-2);">Volver</a>
-								<?php		
-															}
-														}else{
-								?>
-															<p class="mes_false"><span class="icon-remove-user"> </span>Correo o usuario existente.</p><a class="volver" href="javascript:history.go(-3);">Volver</a>
-								<?php	
-														}
-													}else{
-								?>
-														<p class="mes_false"><span class="icon-warning"> </span>Error al crear el usuario.</p><a class="volver" href="javascript:history.go(-2);">Volver</a>
-								<?php		
-													}
-												}
-											}elseif (isset($_POST['btnRUN'])) {
-												//------------------------- si el administrador rechaza la solicitud.
-												$id_newuser=$_POST['id_newuser'];
-												$why=$_POST['why'];
-												$statusWhy=2;
-												
-
-												if ($why=="") {
-								?>
-													<p class="mes_false"><span class="icon-remove-user"> </span>Llena por favor el campo requerido.</p><a class="volver" href="javascript:history.go(-3);">Volver</a>
-								<?php
-												}else{
-													
-													// actualizar el por que del usuario nuevo o new user
-													$updateStatusWhy="UPDATE new_user SET why_refuse='$why', status='$statusWhy' WHERE id_newuser='$id_newuser'";
-													$ejecut_updateStatusWhy=mysqli_query($conexion,$updateStatusWhy);
-
-													if ($ejecut_updateStatusWhy){
-								?>
-													<p class="mes_true"><span class="icon-check"> </span>Estado del usuario Actualizado exitosamente.<a class="volver" href="../vistasnew/solicitudes.php">OK</a></p>
-								<?php		
-													}else{
-								?>
-													<p class="mes_false"><span class="icon-warning"> </span>Error al crear el usuario.</p><a class="volver" href="javascript:history.go(-2);">Volver</a>
-								<?php		
-													}
-												}
-											}
-								?>
+							</table>
 						</div>
 					</div>
 				</div>

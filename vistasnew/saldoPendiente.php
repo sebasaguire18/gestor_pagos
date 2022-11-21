@@ -106,7 +106,7 @@
 									</tr>
 									<?php 
 											// consultar los pagos
-											$consultaP="SELECT * FROM balance WHERE quantity<>'0' OR interests<>'0' ";
+											$consultaP="SELECT * FROM balance WHERE total_quantity<>'0'";
 											$ejecut_consultaP=mysqli_query($conexion,$consultaP);
 			
 											while ($mostrarP=mysqli_fetch_array($ejecut_consultaP)) {
@@ -114,7 +114,7 @@
 												// $objeto_DateTime=date_create($mostrarP['date']);
 												// $date = date_format($objeto_DateTime, "j/M - h:i a");
 												
-												$balanceNumber=$mostrarP['quantity'] + $mostrarP['interests'];
+												$balanceNumber=$mostrarP['total_quantity'];
 												$balance=number_format($balanceNumber,0,",",".");
 									?>
 											<tr>
@@ -124,7 +124,7 @@
 									<?php
 											if($mostrar_usu['id_roll']==1 || $mostrar_usu['id_roll']==2){
 									?>
-											<td><a href="../php/editPayment.php?id_user=<?php echo $mostrarP['id_user'] ."&id_newuser=" . $mostrarP['id_newuser'];?>"><span class="icon-creative-commons-share"></span></a></td>
+											<td><a href="../php/editPayment.php?id_newuser=<?php echo $mostrarP['id_newuser'];?>"><span class="icon-creative-commons-share"></span></a></td>
 									<?php		
 											}
 									?>

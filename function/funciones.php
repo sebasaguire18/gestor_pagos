@@ -163,12 +163,15 @@ function consultarNombreCiudad($city_id){
 
 function consultarNombreUsuario($usu_id){
     include '../php/conexion-bd.php';
-
-    $consultaNC = mysqli_query($conexion,"SELECT * FROM new_user WHERE id_newuser = '$usu_id'");
-
-    $mostrar_nameCity = mysqli_fetch_Array($conexion,$consultaNC);
-
-    echo $mostrar_nameCity['city_name'];
+    if ($usu_id == 0 || $usu_id == '0') {
+        echo 'No tiene fiador';
+    }else {
+        $consultaNU = mysqli_query($conexion,"SELECT * FROM new_user WHERE id_newuser = '$usu_id'");
+    
+        $mostrar_nameUsuario = mysqli_fetch_Array($consultaNU);
+    
+        echo $mostrar_nameUsuario['name'];
+    }
 
 }
 

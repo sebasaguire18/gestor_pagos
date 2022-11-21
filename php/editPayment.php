@@ -74,12 +74,11 @@
   </header>
     <?php
         
-            if (isset($_GET['id_user']) && isset($_GET['id_newuser'])) {
-                $id_user=$_GET['id_user'];
+            if (isset($_GET['id_newuser'])) {
                 $id_newuser=$_GET['id_newuser'];
 
-                    // consultar usuario para verificar si existe
-                $consulUser="SELECT * FROM balance WHERE id_user='$id_user' AND id_newuser='$id_newuser'";
+                // consultar usuario para verificar si existe
+                $consulUser="SELECT * FROM balance WHERE id_newuser='$id_newuser'";
                 $ejecutConsulUser=mysqli_query($conexion,$consulUser);
                 $mostrar_U=mysqli_fetch_array($ejecutConsulUser);
 
@@ -94,51 +93,66 @@
                             if (isset($_POST['btnRegisVal'])) {
                                 $quantity=$_POST['cantidad'];
             
-                                if ($quantity=="") {
-                                    echo '<p class="mes_false"><span class="icon-warning"> </span>¡Recuerda llenar el campo!<a href="javascript:history.go(-1)"> <br> Vale.</a></p>';
+                                if ($quantity=="" || $quantity=="0" || $quantity==0) {
+                                    echo '
+                                    <hr>
+                                    <div class="alert alert-warning text-center">
+                                        <p><span class="icon-warning"> </span>¡Recuerda llenar el campo!<a href="javascript:history.go(-1)"> <br> Volver.</a></p>
+                                    </div>
+                                    <hr>';
                                 }else {
                                     // consultar los pagos
-										$consultaP="SELECT * FROM balance WHERE id_user='$id_user' AND id_newuser='$id_newuser'";
-										$ejecut_consultaP=mysqli_query($conexion,$consultaP) or die('error');
-                                        $mostrarP=mysqli_fetch_array($ejecut_consultaP);
-                                        
-                                        $name=$mostrarP['name'];
-                                        $address=$mostrarP['address'];
-                                        $phone_user=$mostrarP['phone_user'];
-                                        $id_userRegis=$mostrar_usu['id_user'];
+                                    $consultaP="SELECT * FROM balance WHERE id_newuser='$id_newuser'";
+                                    $ejecut_consultaP=mysqli_query($conexion,$consultaP) or die('error');
+                                    $mostrarP=mysqli_fetch_array($ejecut_consultaP);
                                     
-                                    // insertar datos y registrar el pago
-                                        $insertPayment="INSERT INTO payment(id_user,id_newuser,name,address,quantity,phone_user,id_userRegis) VALUES('$id_user','$id_newuser','$name','$address','$quantity','$phone_user','$id_userRegis')";
-                                        $ejecut_insertPayment=mysqli_query($conexion,$insertPayment);
+                                    $name=$mostrarP['name'];
+                                    $address=$mostrarP['address'];
+                                    $phone_user=$mostrarP['phone_user'];
+                                    $nit_user=$mostrarP['nit_user'];
+                                    $id_userRegis=$mostrar_usu['id_user'];
+                                    $idPayment = uniqid();
+                                    
+                                    // Restarle a la deuda
+                                    if ($mostrarP['total_quantity']<$quantity) {
+                                            echo '
+                                                <div class="alert alert-danger text-center">
+                                                    <p><span class="icon-warning"> </span>¡El valor ingresado es mayor al saldo restante!</p><a href="javascript:history.go(-1)"> <br> Vale.</a>
+                                                </div>    
+                                                ';
+                                    }else {
+                                            // insertar datos y registrar el pago
+                                            $insertPayment="INSERT INTO payment(id_payment,id_newuser,nit_user,name,address,quantity,phone_user,id_userRegis) VALUES('$idPayment','$id_newuser','$nit_user','$name','$address','$quantity','$phone_user','$id_userRegis')";
+                                            $ejecut_insertPayment=mysqli_query($conexion,$insertPayment);
 
-                                        if ($ejecut_insertPayment) {
-                                            // Restarle a la deuda lo registrado anteriormente.
-                                            if ($mostrarP['interests']<$quantity) {
-                                                $quantityResult=$mostrarP['quantity']-$quantity;
-                                                $editarPay="UPDATE balance SET quantity='$quantityResult' WHERE id_user='$id_user' AND id_newuser='$id_newuser'";
+                                            if ($ejecut_insertPayment) {
+                                        
+                                                $quantityResult=$mostrarP['total_quantity']-$quantity;
+                                                $editarPay="UPDATE balance SET total_quantity='$quantityResult' WHERE id_newuser='$id_newuser'";
                                                 $ejecut_editarPay=mysqli_query($conexion,$editarPay);
 
                                                 if ($ejecut_editarPay) {
-                                                    echo '<p class="mes_true"><span class="icon-check"> </span>Pago Registrado exitosamente. <a href="../vistasnew/saldoPendiente.php"><br> Vale.</a></p>';
+                                                    echo '
+                                                        <div class="alert alert-success text-center">
+                                                            <p><span class="icon-check"> </span>Pago Registrado exitosamente. </p> <a href="../vistasnew/saldoPendiente.php"><br> Vale.</a>
+                                                        </div>    
+                                                        ';
                                                 }else {
-                                                    echo '<p class="mes_false"><span class="icon-warning"> </span>¡Algo Falló en la resta del pago!<a href="javascript:history.go(-1)"> <br> Vale.</a></p>';
+                                                    echo '
+                                                        <div class="alert alert-danger text-center">
+                                                            <p><span class="icon-warning"> </span>¡¡Algo Falló en la resta del pago!!</p><a href="javascript:history.go(-1)"> <br> Vale.</a>
+                                                        </div>    
+                                                        ';
                                                 }
                                             }else {
-                                                $quantityResult=$mostrarP['interests']-$quantity;
-                                                $editarPay="UPDATE balance SET interests='$quantityResult' WHERE id_user='$id_user' AND id_newuser='$id_newuser'";
-                                                $ejecut_editarPay=mysqli_query($conexion,$editarPay);
-
-                                                if ($ejecut_editarPay) {
-                                                    echo '<p class="mes_true"><span class="icon-check"> </span>Pago Registrado exitosamente. <a href="../vistasnew/saldoPendiente.php"><br> Vale.</a></p>';
-                                                }else {
-                                                    echo '<p class="mes_false"><span class="icon-warning"> </span>¡¡Algo Falló en la resta del pago!!<a href="javascript:history.go(-1)"> <br> Vale.</a></p>';
-                                                }
+                                                echo '
+                                                    <div class="alert alert-danger text-center">
+                                                        <p><span class="icon-warning"> </span>¡Algo Falló en el registro del pago!</p><a href="javascript:history.go(-1)"> <br> Vale.</a>
+                                                    </div>    
+                                                    ';
                                             }  
-                                            
-                                        }else {
-                                            echo '<p class="mes_false"><span class="icon-warning"> </span>¡Algo Falló en el registro del pago!<a href="javascript:history.go(-1)"> <br> Vale.</a></p>';
-                                        }
-                                    
+                                        
+                                    }
                                 }
                             }
                         ?> 
@@ -152,7 +166,7 @@
 						<form action="#" method="POST">
                             <div class="row form-group text-center">
                                 <div class="col-md-12">
-                                    <input type="text" class="form-control" name="cantidad" placeholder="Valor sin puntos ni comas">
+                                    <input type="number" class="form-control" name="cantidad" placeholder="Valor sin puntos ni comas">
                                 </div>
                             </div>
                             <div class="row form-group text-center">
