@@ -4,6 +4,7 @@
   include '../function/select_usuario.php';
   include '../function/select_usuario_ex.php';
   include '../function/select_notifications.php';
+  include '../function/funciones.php';
 
   if($_SESSION['usuario']){
                 $nombre=$_SESSION['usuario'];
@@ -41,16 +42,7 @@
   <div id="page">
   <nav class="gtco-nav" role="navigation">
     <div class="gtco-container">
-      <div class="row">
-        <div class="col-md-12 text-right gtco-contact">
-          <ul class="">
-            <!-- <li><a href="#"><i class="icon-phone"></i> +1 (0)123 456 7890 </a></li>
-            <li><a href="#"><i class="ti-twitter-alt"></i> </a></li>
-            <li><a href="#"><i class="ti-facebook"></i></a></li> -->
-            <li id="btn-abrir-popup"><a href="#" ><i class="ti-user"></i> <?php echo $mostrar_usu['name']; ?> </a><?php if ($mostrar_usu['id_roll']==1) {?><span class="label label-warning"><?php echo $solicitudesTotal;}?></span></li>
-          </ul>
-        </div>
-      </div>
+      
 
       <?php include '../includes/popupnew.php'; ?>
 
@@ -86,32 +78,19 @@
                         $ejecut_consultaUDT=mysqli_query($conexion,$consultaUDT);
                         $mostrar_UDT=mysqli_fetch_Array($ejecut_consultaUDT);
                         
-                        // consultar los detalles del usuario User detalles de la tabla inicio para el login
-                        $consultaUDTI="SELECT * FROM inicio WHERE id_newuser='$idUser'";
+                        // consultar los detalles del usuario de la tabla balance
+                        $consultaUDTI="SELECT * FROM balance WHERE id_newuser='$idUser'";
                         $ejecut_consultaUDTI=mysqli_query($conexion,$consultaUDTI);
 						$mostrar_UDTI=mysqli_fetch_Array($ejecut_consultaUDTI);
 						$validarUsuarioDTI=mysqli_num_rows($ejecut_consultaUDTI);
-                    
-                        // Para cambiar el formato de fecha
-						$dateDatabase=date_create($mostrar_UDT['date']);
-						$date = date_format($dateDatabase, "d/F/Y - h:i a");
 						
-						 // para cambiar el formato del precio solicitado
-						 $quantityNumber=$mostrar_UDT['quantity'];
-						 $quantity=number_format($quantityNumber,0,",",".");
 						
                         if ($mostrar_UDT['status'] == 1) {
 									$statusUDT='<td class="tdactive">Aceptada</td>';
                 		}elseif ($mostrar_UDT['status'] == 2)  {
 									$statusUDT='<td class="tdinactive">Rechazada</td>';
-						}	
-						if ($validarUsuarioDTI==1) {
-							if ($mostrar_UDTI['status'] == 1) {
-								$statusUDTI='<td class="tdactive">Activo</td>';
-							}elseif ($mostrar_UDTI['status'] == 0)  {
-										$statusUDTI='<td class="tdinactive">Inactivo</td>';
-							}
 						}
+
                         if ($mostrar_UDT['status'] == 1 || $mostrar_UDT['status']==2) {
                 ?>
 					<h3 class="tittle_form1">Estos son los detalles del usuario <i class="mes_true" ></i></h3>
@@ -126,21 +105,51 @@
                                     <td><?php echo $mostrar_UDT['name']; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="titleEdit">Dirección</td>
-                                    <td><?php echo $mostrar_UDT['address']; ?></td>
-                                </tr>
-                                <tr>
                                     <td class="titleEdit">Identificación</td>
                                     <td><?php echo $mostrar_UDT['nit_user']; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="titleEdit">Télefono</td>
-                                    <td><?php echo $mostrar_UDT['phone_user']; ?></td>
+                                    <td class="titleEdit">Dirección</td>
+                                    <td><?php echo $mostrar_UDT['address']; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="titleEdit">Cantidad solicitada</td>
-                                    <td><?php echo "$ ". $quantity; ?></td>
+                                    <td class="titleEdit">Ciudad</td>
+                                    <td><?php echo consultarNombreCiudad($mostrar_UDT['city']); ?></td>
                                 </tr>
+                                <tr>
+                                    <td class="titleEdit">Dirección</td>
+                                    <td><?php echo $mostrar_UDT['address']; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="titleEdit">Dirección</td>
+                                    <td><?php echo $mostrar_UDT['address']; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="titleEdit">Dirección</td>
+                                    <td><?php echo $mostrar_UDT['address']; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="titleEdit">Dirección</td>
+                                    <td><?php echo $mostrar_UDT['address']; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="titleEdit">Télefono</td>
+                                    <td><a href="tel:<?php echo $mostrar_UDT['phone_user']; ?>"><?php echo $mostrar_UDT['phone_user']; ?></a></td>
+                                </tr>
+                                <tr>
+                                    <td class="titleEdit">Cupo Crédito</td>
+                                    <td><?php echo formatoAPrecio($mostrar_UDT['quantity']); ?></td>
+                                </tr>
+								<?php if ($validarUsuarioDTI > 0)  { ?>
+                                <tr>
+                                        <td class="titleEdit">Interés</td>
+                                        <td><?php echo formatoAPrecio($mostrar_UDTI['interests']); ?></td>
+								</tr>
+                                <tr>
+                                        <td class="titleEdit">Saldo Pendiente</td>
+                                        <td><?php echo formatoAPrecio($mostrar_UDTI['total_quantity']); ?></td>
+								</tr>
+                                    <?php } ?> 
                                 <tr>
                                     <?php if ($mostrar_UDT['status'] == 2)  { ?>
                                         <td class="titleEdit">Razón del Rechazo</td>
@@ -149,44 +158,13 @@
                                 </tr>
                                 <tr>    
                                     <td class="titleEdit">Fecha solicitud</td>
-                                    <td><?php echo $date; ?></td>
+                                    <td><?php echo formatoAFecha($mostrar_UDT['date'],1); ?></td>
                                 </tr>
                                 <tr>    
                                     <td class="titleEdit">Solicitud</td>
                                     <?php echo $statusUDT; ?>
 								</tr>
-								<!-- mostrar el estado si el usuario existe en la tabla de inicio de sesión -->
-									<?php
-										if ($validarUsuarioDTI==1) {
-										?>
-									<tr>    
-										<td class="titleEdit">Estado</td>
-										<?php echo $statusUDTI; ?>
-									</tr>
-									<tr>
-										<?php if ($mostrar_UDT['status'] == 1)  { ?>
-											<td class="titleEdit">Correo de inicio de sesión</td>
-											<td><?php echo $mostrar_UDTI['email']; ?></td>
-										<?php } ?>  
-									</tr>
-									<tr>
-										<?php if ($mostrar_UDT['status'] == 1)  { ?>
-											<td class="titleEdit">Contraseña</td>
-											<td><?php echo $mostrar_UDTI['pass']; ?></td>
-										<?php } ?> 
-									</tr>
-									<?php
-										}else{
-									?>
-									<tr>    
-										<td class="titleEdit">Estado</td>
-										<td class="tdinactive">Eliminado de la plataforma</td>
-									</tr>
-									<?php
-										}
-									?>
-								<!-- fin mostrar el estado si el usuario existe en la tabla de inicio de sesión -->
-                               
+
 							</table>
                             <?php
                                 }else {

@@ -43,13 +43,7 @@
   <div id="page">
   <nav class="gtco-nav" role="navigation">
     <div class="gtco-container">
-      <div class="row">
-        <div class="col-md-12 text-right gtco-contact">
-          <ul class="">
-            <li id="btn-abrir-popup"><a href="#" ><i class="ti-user"></i> <?php echo $mostrar_usu['name']; ?> </a><?php if ($mostrar_usu['id_roll']==1) {?><span class="label label-warning"><?php echo $solicitudesTotal;}?></span></li>
-          </ul>
-        </div>
-      </div>
+      
 
       <?php include '../includes/popupnew.php'; ?>
 

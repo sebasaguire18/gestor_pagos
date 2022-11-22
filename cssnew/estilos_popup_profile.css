@@ -1,5 +1,5 @@
 .btn-popup-enla{
-    background: rgba(0,0,0,.05);
+    background: rgba(0,0,0,0);
     display: block;
     text-align: center;
     padding: 10px 15px;
@@ -8,10 +8,10 @@
     background: rgba(0,0,0,.15);
 }
 .content_enlaces a:nth-child(1){
-    border-radius: 3px 3px 0px 0px;    
+    border-radius: 5px 5px 0px 0px;    
 }
 .content_enlaces a:nth-child(5){
-    border-radius: 0px 0px 3px 3px;
+    border-radius: 0px 0px 5px 5px;
 }
 .btn-popup-enla button{
     background: none;

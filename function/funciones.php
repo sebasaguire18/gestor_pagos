@@ -179,9 +179,53 @@ function consultarNombreUsuario($usu_id){
 
 function formatoAPrecio($precio){
         
-    $precioCF=number_format($precio,0,",",".");
+    $precioCF='$ '.number_format($precio,0,",",".");
 
     return $precioCF;
+}
+
+// dar formato a una fecha, sí se le pasa el segundo parametro regresa la fecha con la hora
+
+function formatoAFecha($fecha,$hora=false){
+        
+    date_default_timezone_set('America/Bogota');
+
+    if ($hora) {
+        $mes = array("","Enero",
+                "Febrero",
+                "Marzo",
+                "Abril",
+                "Mayo",
+                "Junio",
+                "Julio",
+                "Agosto",
+                "Septiembre",
+                "Octubre",
+                "Noviembre",
+                "Diciembre");
+
+        $fechaCF=date('d',strtotime($fecha)) . " de " . $mes[date('n',strtotime($fecha))] . " de " . date('Y',strtotime($fecha)) . " a las " . date('g:i a',strtotime($fecha));
+
+        return $fechaCF;
+        
+    }else {
+        $mes = array("","Enero",
+                    "Febrero",
+                    "Marzo",
+                    "Abril",
+                    "Mayo",
+                    "Junio",
+                    "Julio",
+                    "Agosto",
+                    "Septiembre",
+                    "Octubre",
+                    "Noviembre",
+                    "Diciembre");
+
+        $fechaCF=date('d',strtotime($fecha))." de ". $mes[date('n',strtotime($fecha))] . " de " . date('Y',strtotime($fecha));
+
+        return $fechaCF;
+    }
 }
 
 ?>
