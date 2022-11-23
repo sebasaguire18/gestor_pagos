@@ -42,6 +42,44 @@ function listaUsuTable(){
     }
 }
 
+function consultarClientesLista($status){
+    include '../php/conexion-bd.php';
+        if($_SESSION['usuario']){
+            $nombre=$_SESSION['usuario'];
+        
+        $consultar_usu="SELECT * FROM inicio WHERE name='$nombre' AND status=1";
+        $ejec_c_u=mysqli_query($conexion,$consultar_usu);
+        $mostrar_usu=mysqli_fetch_array($ejec_c_u);
+
+        if ($status == 3) {
+            $ejecut_consultaUE2=mysqli_query($conexion,"SELECT * FROM new_user INNER JOIN balance ON new_user.id_newuser = balance.id_newuser ORDER BY new_user.id_newuser ASC");
+        }else {
+            $ejecut_consultaUE2= mysqli_query($conexion,"SELECT * FROM new_user INNER JOIN balance ON new_user.id_newuser = balance.id_newuser WHERE new_user.status = $status ORDER BY new_user.id_newuser DESC");
+        }
+        
+        while ($mostrar_UE = mysqli_fetch_array($ejecut_consultaUE2)) {
+            
+            if ($mostrar_UE['status'] == 1) {
+                $status='<td class="tdactive"><i class="ti-check"></i></td>';
+            }elseif ($mostrar_UE['status'] == 0)  {
+                $status='<td class="tdinactive"><i class="ti-close"></i></td>';
+            }
+        ?>
+                    <tr>
+                        <td><?php echo $mostrar_UE['nit_user']; ?></td>
+                        <td><?php echo $mostrar_UE['name']; ?></td>
+                        <td><?php consultarNombreCiudad($mostrar_UE['city']); ?></td>
+                        <td><?php echo formatoAPrecio($mostrar_UE['total_quantity']); ?></td>
+                        <?php echo $status;?>
+                        <?php if($mostrar_usu['id_roll']==1){ ?>
+                            <td class="text-center"><a title="Editar" href="../php/editUser.php?id_user=<?php echo $mostrar_UE['id_newuser'];?>"><i class="ti-file"></i></a></td>
+                        <?php } ?>
+                    </tr>
+        <?php
+        }
+    }   
+}
+
 function consultarUsuariosLista($status){
     include '../php/conexion-bd.php';
         if($_SESSION['usuario']){
@@ -75,7 +113,9 @@ function consultarUsuariosLista($status){
                         <td><?php echo $mostrar_UE['name']; ?></td>
                         <td><?php echo $tipo_user; ?></td>
                         <?php echo $status;?>
-                        <td class="text-center"><a title="Editar" href="../php/editUser.php?id_user=<?php echo $mostrar_UE['id_user'];?>"><i class="ti-file"></i></a></td>
+                        <?php if($mostrar_usu['id_roll']==1){ ?>
+                            <td class="text-center"><a title="Editar" href="../php/editUser.php?id_user=<?php echo $mostrar_UE['id_user'];?>"><i class="ti-file"></i></a></td>
+                        <?php } ?>
                     </tr>
         <?php
         }

@@ -193,13 +193,15 @@
 
 						<div class="table-responsive-xl"> 
 					
-							<table id="tbListaPrecios" class="table table-striped text-white">
+							<table id="tbListaUsuarios" class="table table-striped text-white">
 								<thead class="thead-dark text-center">
 									<tr>
 										<th scope="col">Nombre</th>
 										<th scope="col">Rol</th>
 										<th scope="col">Estado</th>
-										<th scope="col"></th>
+										<?php if ($mostrar_usu['id_roll']==1){ ?>
+											<th scope="col"></th>
+										<?php } ?>
 									</tr>
 								</thead>
 								<tbody class="text-center">
@@ -212,8 +214,40 @@
 					</div>
 				</div>
 			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<div class="gtco-section">
+						<h3 class="tittle_form2">Clientes de la plataforma</h3>
+						<p>¡Recuerda tratar los datos de forma segura!</p>
+
+						<div class="table-responsive-xl"> 
+					
+							<table id="tbListaClientes" class="table table-striped text-white">
+								<thead class="thead-dark text-center">
+									<tr>
+										<th scope="col">Identificación</th>
+										<th scope="col">Nombre</th>
+										<th scope="col">Ciudad</th>
+										<th scope="col">Saldo</th>
+										<th scope="col">Estado</th>
+										<?php if ($mostrar_usu['id_roll']==1){ ?>
+											<th scope="col"></th>
+										<?php } ?>
+									</tr>
+								</thead>
+								<tbody class="text-center">
+									<?php
+										consultarClientesLista(1);
+									?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>		
+	</div>	
 	<?php
 		}
 	?>

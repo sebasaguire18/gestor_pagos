@@ -31,6 +31,13 @@
 				},
 				responsive: "true",
 			});
+			// cargar tabla de lista de usuarios
+			$('#tbListaClientes').DataTable({
+				"language": {
+					"url": "datatables/Spanish.json"
+				},
+				responsive: "true",
+			});
 		});
 	</script>
 	<!-- data tables -->

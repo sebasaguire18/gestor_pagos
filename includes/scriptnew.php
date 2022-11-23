@@ -32,7 +32,15 @@
 			});
 
 			// cargar tabla de lista de precios
-            $('#tbListaPrecios').DataTable({
+            $('#tbListaUsuarios').DataTable({
+                "language": {
+                    "url": "../datatables/Spanish.json"
+                },
+                responsive: "true",
+            });
+
+			// cargar tabla de lista de precios
+            $('#tbListaClientes').DataTable({
                 "language": {
                     "url": "../datatables/Spanish.json"
                 },
