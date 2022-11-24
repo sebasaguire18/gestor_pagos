@@ -117,34 +117,34 @@
                                     <td><?php echo consultarNombreCiudad($mostrar_UDT['city']); ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="titleEdit">Dirección</td>
-                                    <td><?php echo $mostrar_UDT['address']; ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="titleEdit">Dirección</td>
-                                    <td><?php echo $mostrar_UDT['address']; ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="titleEdit">Dirección</td>
-                                    <td><?php echo $mostrar_UDT['address']; ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="titleEdit">Dirección</td>
-                                    <td><?php echo $mostrar_UDT['address']; ?></td>
-                                </tr>
-                                <tr>
                                     <td class="titleEdit">Télefono</td>
                                     <td><a href="tel:<?php echo $mostrar_UDT['phone_user']; ?>"><?php echo $mostrar_UDT['phone_user']; ?></a></td>
+                                </tr>
+                                <tr>
+                                    <td class="titleEdit">Fiador</td>
+                                    <?php if ($mostrar_UDT['fiador']<>0) { ?>
+                                        <td title="Ver detalles del cliente"><a href="../php/detalleUser.php?idUser=<?php echo $mostrar_UDT['fiador']; ?>"><?php echo consultarNombreUsuario($mostrar_UDT['fiador']); ?></a></td>
+                                    <?php }else{ ?>
+                                        <td><?php echo consultarNombreUsuario($mostrar_UDT['fiador']); ?></td>
+                                    <?php } ?>
                                 </tr>
                                 <tr>
                                     <td class="titleEdit">Cupo Crédito</td>
                                     <td><?php echo formatoAPrecio($mostrar_UDT['quantity']); ?></td>
                                 </tr>
-								<?php if ($validarUsuarioDTI > 0)  { ?>
                                 <tr>
-                                        <td class="titleEdit">Interés</td>
-                                        <td><?php echo formatoAPrecio($mostrar_UDTI['interests']); ?></td>
+                                    <td class="titleEdit">Interés del cupo</td>
+                                    <td><?php echo formatoAPrecio($mostrar_UDTI['interests']); ?></td>
 								</tr>
+                                <tr>
+                                    <td class="titleEdit">Tipo Crédito</td>
+                                    <td><?php echo $mostrar_UDT['tipo_credito']; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="titleEdit">Cuotas</td>
+                                    <td><?php echo $mostrar_UDT['cuotas_credito']; ?></td>
+								</tr>   
+								<?php if ($validarUsuarioDTI > 0)  { ?>
                                 <tr>
                                         <td class="titleEdit">Saldo Pendiente</td>
                                         <td><?php echo formatoAPrecio($mostrar_UDTI['total_quantity']); ?></td>
@@ -156,6 +156,10 @@
                                         <td><?php echo $mostrar_UDT['why_refuse']; ?></td>
                                     <?php } ?> 
                                 </tr>
+                                <tr>
+                                    <td class="titleEdit">Nota de la solicitud</td>
+                                    <td><?php echo $mostrar_UDT['nota']; ?></td>
+								</tr> 
                                 <tr>    
                                     <td class="titleEdit">Fecha solicitud</td>
                                     <td><?php echo formatoAFecha($mostrar_UDT['date'],1); ?></td>

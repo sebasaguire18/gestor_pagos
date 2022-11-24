@@ -57,9 +57,16 @@
 	?>
 		<header id="gtco-header" class="gtco-cover gtco-cover-xs" role="banner" style="background-image:url(../images/backDinero2.png);">
 				<div class="overlay"></div>
-				<div class="gtco-container">
-					<div class="row">
-						<div class="col-md-8 col-md-offset-2 text-center">
+				<div class="gtco-container mgt-7">
+					<div class="row mgt-7">
+						<div class="col-md-3 text-center">
+							<div class="row jfy-ctn-center alg-itm-center">
+								<div class="col-3 dp-flex jfy-ctn-center alg-itm-center pdt-7">
+									<img src="../images/logo3.png" width="100%">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-8 text-center">
 							<div class="display-t">
 								<div class="display-tc">
 									<h1 class="animate-box" data-animate-effect="fadeInUp">Crea tus Usuarios</h1>
@@ -67,6 +74,7 @@
 								</div>
 							</div>
 						</div>
+						
 					</div>
 				</div>
 			</header>
@@ -193,7 +201,7 @@
 
 						<div class="table-responsive-xl"> 
 					
-							<table id="tbListaUsuarios" class="table table-striped text-white">
+							<table class="table table-striped text-white tbListaUsuarios">
 								<thead class="thead-dark text-center">
 									<tr>
 										<th scope="col">Nombre</th>
@@ -216,14 +224,14 @@
 			</div>
 			<hr>
 			<div class="row">
-				<div class="col-md-12 text-center">
+				<div class="col-12 mg-5 text-center">
 					<div class="gtco-section">
 						<h3 class="tittle_form2">Clientes de la plataforma</h3>
 						<p>¡Recuerda tratar los datos de forma segura!</p>
 
 						<div class="table-responsive-xl"> 
 					
-							<table id="tbListaClientes" class="table table-striped text-white">
+							<table class="table table-striped text-white tbListaClientes">
 								<thead class="thead-dark text-center">
 									<tr>
 										<th scope="col">Identificación</th>

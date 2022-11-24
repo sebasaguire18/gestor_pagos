@@ -25,14 +25,14 @@
 	<script>
         $(document).ready(function() {
 			// cargar tabla de lista de usuarios
-			$('#tbListaUsuarios').DataTable({
+			$('.tbListaUsuarios').DataTable({
 				"language": {
 					"url": "datatables/Spanish.json"
 				},
 				responsive: "true",
 			});
 			// cargar tabla de lista de usuarios
-			$('#tbListaClientes').DataTable({
+			$('.tbListaClientes').DataTable({
 				"language": {
 					"url": "datatables/Spanish.json"
 				},

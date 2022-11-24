@@ -425,22 +425,26 @@
 										$consultaP="SELECT * FROM balance";
 										$ejecut_consultaP=mysqli_query($conexion,$consultaP);
 				?>
-										<table class="tableUserEdit">
-											<tr>
-												<td class="titleEdit">ID</td>
-												<td class="titleEdit">Nombre</td>
-												<td class="titleEdit">Contacto</td>
-												<td class="titleEdit">Deuda</td>
-											</td>
+									<div class="table-responsive-xl"> 
+										<table class="table table-striped text-white tableUserAmpliarPrestamo">
+											<thead class="thead-dark text-center">
+												<tr>
+													<td class="titleEdit">Identificación</td>
+													<td class="titleEdit">Nombre</td>
+													<td class="titleEdit">Contacto</td>
+													<td class="titleEdit">Deuda</td>
+													<td class="titleEdit"></td>
+												</tr>
+											</thead>
 				<?php
 										while ($mostrarP=mysqli_fetch_array($ejecut_consultaP)) {
 
 											$saldoTotalNumero=$mostrarP['quantity']+$mostrarP['interests'];
 											$saldoTotal=number_format($saldoTotalNumero,0,",",".");
 									?>	
-										
+											
 											<tr>
-												<td><?php echo $mostrarP['id_balance']; ?></td>
+												<td><?php echo $mostrarP['nit_user']; ?></td>
 												<td><?php echo $mostrarP['name']; ?></td>
 												<td><?php echo $mostrarP['phone_user']; ?></td>
 												<td><?php echo $saldoTotal; ?></td>
@@ -450,6 +454,7 @@
 										}
 									?>
 										</table>
+									</div>
 										<br><hr><br>
 				</div>
 					<div class="col-md-5 col-md-push-1 animate-box">

@@ -31,16 +31,24 @@
 				responsive: "true",
 			});
 
-			// cargar tabla de lista de precios
-            $('#tbListaUsuarios').DataTable({
+			// cargar tabla de lista de usuarios
+            $('.tbListaUsuarios').DataTable({
                 "language": {
                     "url": "../datatables/Spanish.json"
                 },
                 responsive: "true",
             });
 
-			// cargar tabla de lista de precios
-            $('#tbListaClientes').DataTable({
+			// cargar tabla de lista de clientes
+            $('.tbListaClientes').DataTable({
+                "language": {
+                    "url": "../datatables/Spanish.json"
+                },
+                responsive: "true",
+            });
+
+			// cargar tabla de lista de clientes para ampliar prestamo
+            $('.tableUserAmpliarPrestamo').DataTable({
                 "language": {
                     "url": "../datatables/Spanish.json"
                 },

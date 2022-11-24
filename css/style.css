@@ -2461,3 +2461,6 @@ form label {
   left: 0;
   z-index: 1030;
 }
+.table-responsive-xl{
+  overflow: auto!important;
+}
