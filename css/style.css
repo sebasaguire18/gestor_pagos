@@ -493,7 +493,6 @@ h1, h2, h3, h4, h5, h6, figure {
   left: 0;
   top: .05em;
   font-family: 'icomoon';
-  speak: none;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -808,7 +807,6 @@ form label {
   border-radius: 4px;
 }
 .gtco-tabs .gtco-tab-nav li {
-  float: left;
   margin: 0;
   padding: 0;
   width: 25%;
@@ -973,7 +971,6 @@ form label {
 }
 #gtco-footer .gtco-widget .gtco-quick-contact li i {
   width: 30px;
-  float: left;
   font-size: 18px;
   position: relative;
   margin-top: 4px;
@@ -1053,7 +1050,6 @@ form label {
   position: absolute;
   right: 0px;
   font-family: 'icomoon';
-  speak: none;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
