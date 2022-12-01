@@ -195,9 +195,8 @@ function consultarCiudadesSelect($status){
 
 function consultarPagosLista($status,$usu_id=false){
     include '../php/conexion-bd.php';
-        if($_SESSION['usuario']){
+    
             $nombre=$_SESSION['usuario'];
-            
             $consultar_usu="SELECT * FROM inicio WHERE name='$nombre' AND status=1";
             $ejec_c_u=mysqli_query($conexion,$consultar_usu);
             $mostrar_usu=mysqli_fetch_array($ejec_c_u);
@@ -258,7 +257,6 @@ function consultarPagosLista($status,$usu_id=false){
             <?php
             }
         }
-    }   
 }
 
 function consultarNombreCiudad($city_id){

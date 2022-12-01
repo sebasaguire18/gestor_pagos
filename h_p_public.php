@@ -1,14 +1,3 @@
-<?php 
-	session_start();
-	error_reporting(0); 
-	if ($_SESSION['usuario']) {
-		$nombre=$_SESSION['usuario'];
-		header("location:vistasnew/index.php");
-	
-	}else{
-
-
-?>
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -46,16 +35,14 @@
 				<!-----------------------------------------  Inicio de sesión overlay login ----------------------------------------->
 					<div class="overlay active" id="overlay">
 						<div class="popup active" id="popup">
-							<h3>Iniciar Sesión</h3>
-							<form action="php/iniciarsesion.php" method="POST">
+							<h3>Consultar Historial de Pagos</h3>
+							<form action="vistasnew/historial_pagos.php" method="GET">
 								<div class="contenedor-inputs">
-									<input type="email" name="email" placeholder="Email">
-									<input type="password" name="password" placeholder="********">
+									<input type="number" name="nit_user" placeholder="Cédula o Documento de identidad">
 								</div>
-								<input type="submit" name="btn-iniciar" class="btn-submit-popup btn-block" value="Validar">
+								<input type="submit" class="btn-submit-popup btn-block" value="Consultar">
 							</form>
 						</div>
-						<a href="h_p_public.php" class="pst-abs btnHP btn btn-primary pd-5 " title="Consultar Historial de pago"><span class="ti-view-list-alt"></span></a>
 					</div>
 				<!----------------------------------------- / Inicio de sesión overlay login ----------------------------------------->
 
@@ -69,4 +56,3 @@
 		<?php include 'includes/script.php'; ?>
 	</body>
 </html>
-<?php 	} ?>

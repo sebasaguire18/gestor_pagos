@@ -1,10 +1,16 @@
 <?php 
-// ti-view-list-alt
   include '../php/conexion-bd.php';
   include '../function/funciones.php';
-  include '../function/select_usuario.php';
-  include '../function/select_usuario_ex.php';
-  include '../function/select_notifications.php';
+  
+  session_start();
+  error_reporting(0); 
+  
+  if ($_SESSION['usuario']) {
+    $nombre=$_SESSION['usuario'];
+    include '../function/select_usuario.php';
+    include '../function/select_usuario_ex.php';
+    include '../function/select_notifications.php';
+  }
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -39,11 +45,13 @@
 <div id="page">
     <nav class="gtco-nav" role="navigation">
         <div class="gtco-container">
-
+        <?php if ($_SESSION['usuario']) {
+            $nombre=$_SESSION['usuario'];
+        ?>
             <?php include '../includes/popupnew.php'; ?>
 
             <?php include '../includes/navnew.php'; ?>
-        
+        <?php }?>
         </div>
     </nav>
     <header id="gtco-header" class="gtco-cover gtco-cover-xs" role="banner" style="background-image:url(../images/backDinero2.png);">
@@ -54,7 +62,7 @@
                     <div class="display-t">
                         <div class="display-tc">
                             <h1 class="animate-box" data-animate-effect="fadeInUp">Historial de pagos</h1>
-                            <h2 class="animate-box" data-animate-effect="fadeInUp">Aquí puedes ver todos los <em>Detalles</em> de los historiales de pagos realizados</h2>
+                            <h2 class="animate-box" data-animate-effect="fadeInUp">Aquí puedes ver todos los <em>Detalles</em> de los de pagos realizados</h2>
                         </div>
                     </div>
                 </div>
