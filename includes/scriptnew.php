@@ -55,6 +55,14 @@
                 responsive: "true",
             });
 
+			// cargar tabla de pagos
+            $('.tblPagosRealizados').DataTable({
+                "language": {
+                    "url": "../datatables/Spanish.json"
+                },
+                responsive: "true",
+            });
+
 			// cargar tabla de ciudades
             $('#tbCiudades').DataTable({
                 "language": {

@@ -117,31 +117,7 @@
 									</tr>
 									<?php 
 
-										// --------------------------------filtro------------------------------------------
-
-										if (isset($_POST['btnFiltrar'])) {
-
-											$date=$_POST['date'];
-
-											// consultar los pagos
-											$consultaP="SELECT * FROM payment ORDER BY date ASC";
-											$ejecut_consultaP=mysqli_query($conexion,$consultaP);
-											$num_rows=mysqli_num_rows($ejecut_consultaP);
-											while ($mostrarP=mysqli_fetch_array($ejecut_consultaP)) {
-												$tel=$mostrarP['phone_user'];
-												$objeto_DateTime=date_create($mostrarP['date']);
-												$date = date_format($objeto_DateTime, "j/M - h:i a");	
-											?>
-											<tr>
-												<td"><?php echo $mostrarP['name']. " &#8212 Cel:";?><?php echo "<a href='tel:". $tel .">" . $tel ;?></a></td>
-												<td"><?php echo $mostrarP['address']; ?></td>
-												<td"><?php echo "$ ".$mostrarP['quantity']; ?></td>
-												<td"><?php echo $date; ?></td>
-											</tr>
-											<?php
-											}
-										}else {
-											
+										
 											// consultar los pagos
 											$consultaP="SELECT * FROM payment";
 											$ejecut_consultaP=mysqli_query($conexion,$consultaP);
@@ -171,17 +147,15 @@
 												<td><?php echo "$ ".$pago; ?></td>
 												<td><?php echo $date; ?></td>
 									<?php
-											if($mostrar_usu['id_roll']==1){
+												if($mostrar_usu['id_roll']==1){
 									?>
-											<td><a href="../php/detallePago.php?id_payment=<?php echo $mostrarP['id_payment'];?>"><span class="icon-creative-commons-share"></span></a></td>
+												<td><a href="../php/detallePago.php?id_payment=<?php echo $mostrarP['id_payment'];?>"><span class="icon-creative-commons-share"></span></a></td>
 									<?php		
-											}
+												}
 									?>
 											</tr>
 									<?php
-											} 
-										
-										}
+											}
 									?>
 								</table>
 								<nav aria-label="Page navigation example">

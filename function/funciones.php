@@ -42,7 +42,7 @@ function listaUsuTable(){
     }
 }
 
-function consultarClientesLista($status){
+function consultarClientesLista($status,$page=false){
     include '../php/conexion-bd.php';
         if($_SESSION['usuario']){
             $nombre=$_SESSION['usuario'];
@@ -73,6 +73,9 @@ function consultarClientesLista($status){
                         <?php echo $status;?>
                         <?php if($mostrar_usu['id_roll']==1){ ?>
                             <td class="text-center"><a title="Editar" href="../php/editUser.php?id_user=<?php echo $mostrar_UE['id_newuser'];?>"><i class="ti-file"></i></a></td>
+                        <?php } ?>
+                        <?php if($page){ ?>
+                            <td class="text-center"><a title="Ver Historial" href="../vistasnew/historial_pagos.php?nit_user=<?php echo $mostrar_UE['nit_user'];?>"><i class="ti-plus"></i></a></td>
                         <?php } ?>
                     </tr>
         <?php
@@ -190,6 +193,74 @@ function consultarCiudadesSelect($status){
     }
 }
 
+function consultarPagosLista($status,$usu_id=false){
+    include '../php/conexion-bd.php';
+        if($_SESSION['usuario']){
+            $nombre=$_SESSION['usuario'];
+            
+            $consultar_usu="SELECT * FROM inicio WHERE name='$nombre' AND status=1";
+            $ejec_c_u=mysqli_query($conexion,$consultar_usu);
+            $mostrar_usu=mysqli_fetch_array($ejec_c_u);
+
+        if ($usu_id) {
+            if ($status == 3) {
+                $ejecut_consultaPayment=mysqli_query($conexion,"SELECT * FROM payment WHERE nit_user = $usu_id ORDER BY date DESC");
+            }else {
+                $ejecut_consultaPayment= mysqli_query($conexion,"SELECT * FROM payment WHERE nit_user = $usu_id status = $status ORDER BY date DESC");
+            }
+            
+            while ($mostrarPagos = mysqli_fetch_array($ejecut_consultaPayment)) {
+                
+               if ($mostrarPagos['status'] == 1) {
+                    $status='<td class="tdactive"><i class="ti-check"></i></td>';
+                }elseif ($mostrarPagos['status'] == 0)  {
+                    $status='<td class="tdinactive"><i class="ti-close"></i></td>';
+                }
+            ?>
+                        <tr>
+                            <?php if($mostrar_usu['id_roll']==1){ ?>
+                            <td><?php echo $mostrarPagos['id_payment']; ?></td>
+                            <?php } ?>
+                            <td><?php echo $mostrarPagos['name']; ?></td>
+                            <td><?php echo $mostrarPagos['address']; ?></td>
+                            <td><?php echo formatoAPrecio($mostrarPagos['quantity']); ?></td>
+                            <td><?php echo consultarRazonAbono($mostrarPagos['razon_abono']); ?></td>
+                            <td><?php echo formatoAFecha($mostrarPagos['date'],1); ?></td>
+                        </tr>
+            <?php
+            }
+        }else{
+            if ($status == 3) {
+                $ejecut_consultaPayment=mysqli_query($conexion,"SELECT * FROM payment ORDER BY date DESC");
+            }else {
+                $ejecut_consultaPayment= mysqli_query($conexion,"SELECT * FROM payment WHERE status = $status ORDER BY date DESC");
+            }
+            
+            while ($mostrarPagos = mysqli_fetch_array($ejecut_consultaPayment)) {
+                
+                if ($mostrarPagos['status'] == 1) {
+                    $status='<td class="tdactive"><i class="ti-check"></i></td>';
+                }elseif ($mostrarPagos['status'] == 0)  {
+                    $status='<td class="tdinactive"><i class="ti-close"></i></td>';
+                }
+            ?>
+                        <tr>
+                            <td><?php echo $mostrarPagos['id_payment']; ?></td>
+                            <td><?php echo $mostrarPagos['name'];?> &#8212 Cel: <a href='tel:<?php echo $mostrarPagos['phone_user'];?>'> <?php echo $mostrarPagos['phone_user']; ?></a></td>
+                            <td><?php echo $mostrarPagos['address']; ?></td>
+                            <td><?php echo formatoAPrecio($mostrarPagos['quantity']); ?></td>
+                            <td><?php echo consultarRazonAbono($mostrarPagos['razon_abono']); ?></td>
+                            <td><?php echo formatoAFecha($mostrarPagos['date'],1); ?></td>
+                            <?php if($mostrar_usu['id_roll']==1){ ?>
+                            <td><a href="../php/detallePago.php?id_payment=<?php echo $mostrarPagos['id_payment'];?>"><span class="icon-creative-commons-share"></span></a></td>
+                            <?php } ?>
+                        </tr>
+            <?php
+            }
+        }
+    }   
+}
+
 function consultarNombreCiudad($city_id){
     include '../php/conexion-bd.php';
 
@@ -215,11 +286,19 @@ function consultarNombreUsuario($usu_id){
 
 }
 
+function consultarRazonAbono($razon_id){
+    if ($razon_id == '1' || $razon_id == 1) {
+        return 'Abono a deuda'; 
+    }elseif ($razon_id == '2' || $razon_id == 2) {
+        return 'Renovación';
+    }
+}
+
 // dar formato a un precio
 
 function formatoAPrecio($precio){
         
-    $precioCF='$ '.number_format($precio,0,",",".");
+    $precioCF='$'.number_format($precio,0,",",".");
 
     return $precioCF;
 }

@@ -6255,3 +6255,23 @@ button.close {
 }
 
 /*# sourceMappingURL=bootstrap.css.map */
+
+
+
+.part {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  word-wrap: break-word;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  box-shadow: 0 0.7rem 1rem rgb(0 0 21 / 15%);
+  margin-top: .5rem !important;
+  margin-bottom: .5rem !important;
+  padding: 2rem;
+}
+
+.txt-white{
+  color: white!important;
+}
