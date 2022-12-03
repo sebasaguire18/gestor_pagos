@@ -4,6 +4,7 @@
   include '../function/select_usuario.php';
   include '../function/select_usuario_ex.php';
   include '../function/select_notifications.php';
+  include '../function/funciones.php';
   include '../php/mostrarfecha.php';
 
   if($_SESSION['usuario']){
@@ -85,45 +86,25 @@
 					<div class="gtco-section">
 						<div class="row form-group text-center">
 							<div class="col-md-12">
-								<h4 class="col-md-12 ">Fecha: <?php echo dateToday(); ?>.</h4>
+								<h4 class="col-md-12 ">Fecha Última Actualización: <?php echo dateToday(); ?>.</h4>
 							</div>
 						</div>
 						<h3 class="tittle_form1 col-md-12 ">Usarios deudores.</h3>
-								<table class="tableUserEdit">
-									<tr>
-										<td class="titleEdit">Nombre</td>
-										<td class="titleEdit">Dirección</td>
-										<td class="titleEdit">Resta</td>
-									</tr>
+								<table class="table table-striped " id="tableSaldosPendientes">
+									<thead>
+										<tr>
+											<td class="titleEdit">Identificación</td>
+											<td class="titleEdit">Nombre</td>
+											<td class="titleEdit">Dirección</td>
+											<td class="titleEdit">Resta</td>
+											<td class="titleEdit">Abonar</td>
+										</tr>
+									</thead>
+									<tbody>
 									<?php 
-											// consultar los pagos
-											$consultaP="SELECT * FROM balance WHERE total_quantity<>'0'";
-											$ejecut_consultaP=mysqli_query($conexion,$consultaP);
-			
-											while ($mostrarP=mysqli_fetch_array($ejecut_consultaP)) {
-
-												// $objeto_DateTime=date_create($mostrarP['date']);
-												// $date = date_format($objeto_DateTime, "j/M - h:i a");
-												
-												$balanceNumber=$mostrarP['total_quantity'];
-												$balance=number_format($balanceNumber,0,",",".");
+										consultarSaldosPendLista(3);
 									?>
-											<tr>
-												<td><?php echo $mostrarP['name']. " &#8212 " . $mostrarP['phone_user']; ?></td>
-												<td><?php echo $mostrarP['address']; ?></td>
-												<td><?php echo "$ ".$balance; ?></td>
-									<?php
-											if($mostrar_usu['id_roll']==1 || $mostrar_usu['id_roll']==2){
-									?>
-											<td><a href="../php/editPayment.php?id_newuser=<?php echo $mostrarP['id_newuser'];?>"><span class="icon-creative-commons-share"></span></a></td>
-									<?php		
-											}
-									?>
-											</tr>
-									<?php
-											} 
-										
-									?>
+									</tbody>
 								</table>
 							</div>
 						</div>
@@ -237,49 +218,33 @@
 		<div id="gtco-subscribe">
 			<div class="gtco-container">
 				<div class="row">
-					<div class="col-md-8 col-md-offset-2 text-center">
+					<div class="col-12 mg-5 text-center">
 						<div class="gtco-section">
-							<h3 class="tittle_form2">Usuarios de la plataforma</h3>
+							<h3 class="tittle_form2">Clientes de la plataforma</h3>
 							<p>¡Recuerda tratar los datos de forma segura!</p>
-							<table class="tableUsuarios">
-								<tr>
-									<td class="title">Nombre</td>
-									<td class="title">Tipo de Usuario</td>
-									<td class="title">Estado</td>
-								</tr>
-							<?php
-								while($mostrar_UE=mysqli_fetch_Array($ejecut_consultaUE2)){
-							?>
-								<tr>
-									<td><?php echo $mostrar_UE['name'];?></td>
-							<?php
-								if ($mostrar_UE['id_roll']==1) {
-									$tipo_user="Administrador";
-								}elseif ($mostrar_UE['id_roll']==2) {
-									$tipo_user="Cobrador";
-								}elseif ($mostrar_UE['id_roll']==3) {
-									$tipo_user="Deudor";
-								}if ($mostrar_UE['status'] == 1) {
-									$status='<td class="tdactive"><span class="icon-check"></span></td>';
-								}elseif ($mostrar_UE['status'] == 0)  {
-									$status='<td class="tdinactive"><span class="icon-cross"></span></td>';
-								}
-								// Para habilitar el editar el usuer
-							?>
-									<td><?php echo $tipo_user; ?></td>
-									<?php echo $status;?>
-							<?php
-									if($mostrar_usu['id_roll']==1){
-							?>
-									<td><a href="../php/editUser.php?id_user=<?php echo $mostrar_UE['id_user'];?>"><span class="icon-creative-commons-share"></span></a></td>
-							<?php		
-									}
-							?>
-								</tr>
-							<?php		
-								}
-							?>
-							</table>
+
+							<div class="table-responsive-xl"> 
+						
+								<table class="table table-striped text-white tbListaClientes">
+									<thead class="thead-dark text-center">
+										<tr>
+											<th scope="col">Identificación</th>
+											<th scope="col">Nombre</th>
+											<th scope="col">Ciudad</th>
+											<th scope="col">Saldo</th>
+											<th scope="col">Estado</th>
+											<?php if ($mostrar_usu['id_roll']==1){ ?>
+												<th scope="col"></th>
+											<?php } ?>
+										</tr>
+									</thead>
+									<tbody class="text-center">
+										<?php
+											consultarClientesLista(1);
+										?>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>

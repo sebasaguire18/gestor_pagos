@@ -205,7 +205,7 @@ function consultarPagosLista($status,$usu_id=false){
             if ($status == 3) {
                 $ejecut_consultaPayment=mysqli_query($conexion,"SELECT * FROM payment WHERE nit_user = $usu_id ORDER BY date DESC");
             }else {
-                $ejecut_consultaPayment= mysqli_query($conexion,"SELECT * FROM payment WHERE nit_user = $usu_id status = $status ORDER BY date DESC");
+                $ejecut_consultaPayment= mysqli_query($conexion,"SELECT * FROM payment WHERE nit_user = $usu_id AND status = $status ORDER BY date DESC");
             }
             
             while ($mostrarPagos = mysqli_fetch_array($ejecut_consultaPayment)) {
@@ -252,6 +252,68 @@ function consultarPagosLista($status,$usu_id=false){
                             <td><?php echo formatoAFecha($mostrarPagos['date'],1); ?></td>
                             <?php if($mostrar_usu['id_roll']==1){ ?>
                             <td><a href="../php/detallePago.php?id_payment=<?php echo $mostrarPagos['id_payment'];?>"><span class="icon-creative-commons-share"></span></a></td>
+                            <?php } ?>
+                        </tr>
+            <?php
+            }
+        }
+}
+
+function consultarSaldosPendLista($status,$usu_id=false){
+    include '../php/conexion-bd.php';
+    
+            $nombre=$_SESSION['usuario'];
+            $consultar_usu=mysqli_query($conexion,"SELECT * FROM inicio WHERE name='$nombre' AND status=1");
+            $mostrar_usu=mysqli_fetch_array($consultar_usu);
+
+        if ($usu_id) {
+            if ($status == 3) {
+                $ejecut_consultaSaldosPendientes=mysqli_query($conexion,"SELECT * FROM balance INNER JOIN new_user ON balance.id_newuser=new_user.id_newuser WHERE balance.total_quantity<>'0' AND id_newuser = $usu_id ORDER BY date DESC");
+            }else {
+                $ejecut_consultaSaldosPendientes= mysqli_query($conexion,"SELECT * FROM balance INNER JOIN new_user ON balance.id_newuser=new_user.id_newuser WHERE balance.total_quantity<>'0' AND id_newuser = $usu_id AND status = $status ORDER BY date DESC");
+            }
+            
+            while ($mostrarSaldo = mysqli_fetch_array($ejecut_consultaSaldosPendientes)) {
+                
+               if ($mostrarSaldo['status'] == 1) {
+                    $status='<td class="tdactive"><i class="ti-check"></i></td>';
+                }elseif ($mostrarSaldo['status'] == 0)  {
+                    $status='<td class="tdinactive"><i class="ti-close"></i></td>';
+                }
+            ?>
+                        <tr>
+                            <td><?php echo $mostrarSaldo['nit_user']; ?></td>
+                            <td><?php echo $mostrarSaldo['name']. " &#8212 " . $mostrarSaldo['phone_user']; ?></td>
+                            <td><?php echo consultarNombreCiudad($mostrarSaldo['city']); ?></td>
+                            <td><?php echo formatoAPrecio($mostrarSaldo['total_quantity']); ?></td>
+                            <?php if($mostrar_usu['id_roll']==1 || $mostrar_usu['id_roll']==2){ ?>
+                                    <td><a title="Realizar Abono" href="../php/editPayment.php?id_newuser=<?php echo $mostrarSaldo['id_newuser'];?>"><span class="ti-receipt"></span></a></td>
+                            <?php } ?>
+                        </tr>
+            <?php
+            }
+        }else{
+            if ($status == 3) {
+                $ejecut_consultaSaldosPendientes=mysqli_query($conexion,"SELECT * FROM balance INNER JOIN new_user ON balance.id_newuser=new_user.id_newuser WHERE balance.total_quantity<>'0' ORDER BY city DESC");
+            }else {
+                $ejecut_consultaSaldosPendientes= mysqli_query($conexion,"SELECT * FROM balance INNER JOIN new_user ON balance.id_newuser=new_user.id_newuser WHERE balance.total_quantity<>'0' AND status = $status ORDER BY city DESC");
+            }
+            
+            while ($mostrarSaldo = mysqli_fetch_array($ejecut_consultaSaldosPendientes)) {
+                
+               if ($mostrarSaldo['status'] == 1) {
+                    $status='<td class="tdactive"><i class="ti-check"></i></td>';
+                }elseif ($mostrarSaldo['status'] == 0)  {
+                    $status='<td class="tdinactive"><i class="ti-close"></i></td>';
+                }
+            ?>
+                        <tr>
+                            <td><?php echo $mostrarSaldo['nit_user']; ?></td>
+                            <td><?php echo $mostrarSaldo['name']. " &#8212 " . $mostrarSaldo['phone_user']; ?></td>
+                            <td><?php echo consultarNombreCiudad($mostrarSaldo['city']); ?></td>
+                            <td><?php echo formatoAPrecio($mostrarSaldo['total_quantity']); ?></td>
+                            <?php if($mostrar_usu['id_roll']==1 || $mostrar_usu['id_roll']==2){ ?>
+                                    <td><a title="Realizar Abono" href="../php/editPayment.php?id_newuser=<?php echo $mostrarSaldo['id_newuser'];?>"><span class="ti-receipt"></span></a></td>
                             <?php } ?>
                         </tr>
             <?php

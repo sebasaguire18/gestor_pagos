@@ -61,6 +61,15 @@
                     "url": "../datatables/Spanish.json"
                 },
                 responsive: "true",
+				"order": [ 0, 'desc' ],
+            });
+
+			// cargar tabla de saldos pendientes
+            $('#tableSaldosPendientes').DataTable({
+                "language": {
+                    "url": "../datatables/Spanish.json"
+                },
+                responsive: "true",
             });
 
 			// cargar tabla de ciudades

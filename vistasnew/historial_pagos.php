@@ -7,6 +7,10 @@
   
   if ($_SESSION['usuario']) {
     $nombre=$_SESSION['usuario'];
+
+    $consultar_usu=mysqli_query($conexion,"SELECT * FROM inicio WHERE name='$nombre' AND status=1");
+    $mostrar_usu=mysqli_fetch_array($consultar_usu);
+
     include '../function/select_usuario.php';
     include '../function/select_usuario_ex.php';
     include '../function/select_notifications.php';
@@ -197,6 +201,9 @@
                                             <th scope="col">Ciudad</th>
                                             <th scope="col">Saldo</th>
                                             <th scope="col">Estado</th>
+                                            <?php if($mostrar_usu['id_roll']==1){ ?>
+                                                <th scope="col"></th>
+                                            <?php } ?>
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
