@@ -106,6 +106,12 @@
                                     $nit_user=$mostrarP['nit_user'];
                                     $id_userRegis=$mostrar_usu['id_user'];
                                     $idPayment = uniqid();
+                                    $formaP=$_POST['formaPago'];
+                                    if ($formaP<>2) {
+                                        $formaP = 'Efectivo';
+                                    }else{
+                                        $formaP = 'Transferencia';
+                                    }
                                     
                                     // Restarle a la deuda
                                     if ($mostrarP['total_quantity']<$quantity) {
@@ -116,7 +122,7 @@
                                                 ';
                                     }else {
                                             // insertar datos y registrar el pago
-                                            $insertPayment="INSERT INTO payment(id_payment,id_newuser,nit_user,name,address,quantity,phone_user,id_userRegis) VALUES('$idPayment','$id_newuser','$nit_user','$name','$address','$quantity','$phone_user','$id_userRegis')";
+                                            $insertPayment="INSERT INTO payment(id_payment,id_newuser,nit_user,name,address,quantity,phone_user,id_userRegis,forma_pago) VALUES('$idPayment','$id_newuser','$nit_user','$name','$address','$quantity','$phone_user','$id_userRegis','$formaP')";
                                             $ejecut_insertPayment=mysqli_query($conexion,$insertPayment);
 
                                             if ($ejecut_insertPayment) {
@@ -158,14 +164,21 @@
                         <h3 class="tittle_form1 col-md-12 ">Registrar pago.</h3>
                         <p>Usuario: <b><em><?php echo $mostrar_U['name']; ?></em></b></p>
 						<form action="#" method="POST">
-                            <div class="row form-group text-center">
-                                <div class="col-md-12">
+                            <div class="row form-group dp-flex jfy-ctn-center">
+                                <div class="col-md-3 text-left">
+                                    <input type="radio" class="mgr-3" name="formaPago" value="1" id="rFP1" checked><label for="rFP1">Efectivo</label>
+                                    <br>
+                                    <input type="radio" class="mgr-3" name="formaPago" value="2" id="rFP2"><label for="rFP2">Transferencia</label>
+                                </div>
+                            </div>
+                            <div class="row form-group dp-flex jfy-ctn-center">
+                                <div class="col-md-8">
                                     <input type="number" class="form-control" name="cantidad" placeholder="Valor sin puntos ni comas">
                                 </div>
                             </div>
-                            <div class="row form-group text-center">
-                                <div class="col-md-12">
-                                    <input type="submit" class="btn btn-success btn-lg" name="btnRegisVal">
+                            <div class="row form-group text-center dp-flex jfy-ctn-center">
+                                <div class="col-md-8">
+                                    <input type="submit" class="btn btn-success btn-lg btn-block" name="btnRegisVal">
                                 </div>
                             </div>
                         </form>

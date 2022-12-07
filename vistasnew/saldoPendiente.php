@@ -90,23 +90,23 @@
 							</div>
 						</div>
 						<h3 class="tittle_form1 col-md-12 ">Usarios deudores.</h3>
-								<table class="table table-striped " id="tableSaldosPendientes">
-									<thead>
-										<tr>
-											<td class="titleEdit">Identificación</td>
-											<td class="titleEdit">Nombre</td>
-											<td class="titleEdit">Dirección</td>
-											<td class="titleEdit">Resta</td>
-											<td class="titleEdit">Abonar</td>
-										</tr>
-									</thead>
-									<tbody>
-									<?php 
-										consultarSaldosPendLista(3);
-									?>
-									</tbody>
-								</table>
-							</div>
+						<div class="table-responsive-xl"> 
+							<table class="table table-striped " id="tableSaldosPendientes">
+								<thead>
+									<tr>
+										<td class="titleEdit">Identificación</td>
+										<td class="titleEdit">Nombre</td>
+										<td class="titleEdit">Dirección</td>
+										<td class="titleEdit">Resta</td>
+										<td class="titleEdit">Abonar</td>
+									</tr>
+								</thead>
+								<tbody>
+								<?php 
+									consultarSaldosPendLista(3);
+								?>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>

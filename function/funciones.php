@@ -224,6 +224,7 @@ function consultarPagosLista($status,$usu_id=false){
                             <td><?php echo $mostrarPagos['address']; ?></td>
                             <td><?php echo formatoAPrecio($mostrarPagos['quantity']); ?></td>
                             <td><?php echo consultarRazonAbono($mostrarPagos['razon_abono']); ?></td>
+                            <td><?php echo $mostrarPagos['forma_pago']; ?></td>
                             <td><?php echo formatoAFecha($mostrarPagos['date'],1); ?></td>
                         </tr>
             <?php

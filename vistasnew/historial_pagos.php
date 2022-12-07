@@ -96,7 +96,7 @@
                         }else{
                         $mostrarDHU=mysqli_fetch_Array($consultarDatosHistorialUsuario);
             ?>
-                        <div class="row">
+                        <div class="row dp-flex jfy-ctn-center">
                             <div class="col-md-5">
                                 <div class="part">
                                     <h2 class="txt-white">Datos del usuario</h2>
@@ -157,27 +157,32 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="col-md-7">
-                                <div class="part table-responsive-xl">
-                                    <table class="table table-striped tblPagosRealizados">
-                                        <thead class="thead-dark text-center">
-                                            <tr>
-                                                <?php if ($mostrar_usu['id_roll']==1){ ?>
-                                                <th scope="col">ID Pago</th>
-                                                <?php } ?>
-                                                <th scope="col">Nombre</th>
-                                                <th scope="col">Dirección</th>
-                                                <th scope="col">Pagó</th>
-                                                <th scope="col">Razón Pago</th>
-                                                <th scope="col">Fecha</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="text-center">
-                                            <?php
-                                                consultarPagosLista(3,$nit_user);
-                                            ?>
-                                        </tbody>
-                                    </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="part">
+                                    <div class="table-responsive-xl">
+                                        <table class="table table-striped tblPagosRealizados">
+                                            <thead class="thead-dark text-center">
+                                                <tr>
+                                                    <?php if ($mostrar_usu['id_roll']==1){ ?>
+                                                    <th scope="col">ID Pago</th>
+                                                    <?php } ?>
+                                                    <th scope="col">Nombre</th>
+                                                    <th scope="col">Dirección</th>
+                                                    <th scope="col">Pagó</th>
+                                                    <th scope="col">Razón Pago</th>
+                                                    <th scope="col">Forma Pago</th>
+                                                    <th scope="col">Fecha</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="text-center">
+                                                <?php
+                                                    consultarPagosLista(3,$nit_user);
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div> 
                             </div>
                         </div>
