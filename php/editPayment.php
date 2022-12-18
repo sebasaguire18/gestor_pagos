@@ -155,13 +155,67 @@
                                     }
                                 }
                             }
+                            if (isset($_POST['btnRenovCred'])) {
+            
+                                if ($id_newuser=="" || $id_newuser=="0" || $id_newuser==0) {
+                                    echo '
+                                    <hr>
+                                    <div class="alert alert-warning text-center">
+                                        <p><span class="icon-warning"> </span>¡Algo salió mal!<a href="javascript:history.go(-1)"> <br> Volver.</a></p>
+                                    </div>
+                                    <hr>';
+                                }else {
+                                    // consultar el saldo total
+                                    $consultaP = mysqli_query($conexion,"SELECT * FROM balance WHERE id_newuser='$id_newuser'");
+                                    $mostrarP = mysqli_fetch_array($consultaP);
+                                    
+                                    $name=$mostrarP['name'];
+                                    $address=$mostrarP['address'];
+                                    $phone_user=$mostrarP['phone_user'];
+                                    $nit_user=$mostrarP['nit_user'];
+                                    $id_userRegis=$mostrar_usu['id_user'];
+                                    $idPayment = uniqid();
+                                    $quantityRes = $mostrarP['total_quantity'];
+                                    $formaP = 'Efectivo';
+                                    
+                                    // Restarle a la deuda y setear todo de nuevo //
+                                    // insertar datos y registrar el pago
+                                    $insertPayment = mysqli_query($conexion,"INSERT INTO payment(id_payment,id_newuser,nit_user,name,address,quantity,phone_user,id_userRegis,razon_abono,forma_pago) VALUES('$idPayment','$id_newuser','$nit_user','$name','$address','$quantityRes','$phone_user','$id_userRegis',2,'$formaP')");
+
+                                    if ($insertPayment) {
+                                
+                                        $quantityResult = $mostrarP['quantity']+$mostrarP['interests'];
+                                        $editarPay = mysqli_query($conexion,"UPDATE balance SET total_quantity='$quantityResult', date_renov = NOW() WHERE id_newuser='$id_newuser'");
+
+                                        if ($editarPay) {
+                                            echo '
+                                                <div class="alert alert-success text-center">
+                                                    <p><span class="icon-check"> </span>Pago Registrado exitosamente. </p> <a href="../vistasnew/saldoPendiente.php"><br> Vale.</a>
+                                                </div>    
+                                                ';
+                                        }else {
+                                            echo '
+                                                <div class="alert alert-danger text-center">
+                                                    <p><span class="icon-warning"> </span>¡¡Algo Falló en la resta del pago!!</p><a href="javascript:history.go(-1)"> <br> Vale.</a>
+                                                </div>    
+                                                ';
+                                        }
+                                    }else {
+                                        echo '
+                                            <div class="alert alert-danger text-center">
+                                                <p><span class="icon-warning"> </span>¡Algo Falló en el registro del pago!</p><a href="javascript:history.go(-1)"> <br> Vale.</a>
+                                            </div>    
+                                            ';
+                                    }
+                                }
+                            }
                         ?> 
                         <div class="row form-group text-center">
 							<div class="col-md-12">
 								<h4 class="col-md-12 ">Fecha: <?php echo dateToday(); ?>.</h4>
 							</div>
 						</div>
-                        <h3 class="tittle_form1 col-md-12 ">Registrar pago.</h3>
+                        <h3 class="tittle_form1 col-md-12 ">Registrar abono.</h3>
                         <p>Usuario: <b><em><?php echo $mostrar_U['name']; ?></em></b></p>
 						<form action="#" method="POST">
                             <div class="row form-group dp-flex jfy-ctn-center">
@@ -178,70 +232,18 @@
                             </div>
                             <div class="row form-group text-center dp-flex jfy-ctn-center">
                                 <div class="col-md-8">
-                                    <input type="submit" class="btn btn-success btn-lg btn-block" name="btnRegisVal">
+                                    <input type="submit" class="btn btn-success btn-lg btn-block" name="btnRegisVal" value="Enviar abono">
+                                    <input type="submit" class="btn btn-primary btn-lg btn-block" name="btnRenovCred" value="Renovar crédito">
                                 </div>
                             </div>
                         </form>
 					</div>
 				</div>
 			</div>
-		</div>
-    <?php
-        if ($mostrar_usu['id_roll']==1 || $mostrar_usu['id_roll']==2) {
-	?>
-		<div id="gtco-subscribe">
-			<div class="gtco-container">
-				<div class="row">
-					<div class="col-md-8 col-md-offset-2 text-center">
-						<div class="gtco-section">
-							<h3 class="tittle_form2">Usuarios de la plataforma</h3>
-							<p>¡Recuerda tratar los datos de forma segura!</p>
-							<table class="tableUsuarios">
-								<tr>
-									<td class="title">Nombre</td>
-									<td class="title">Tipo de Usuario</td>
-									<td class="title">Estado</td>
-								</tr>
-							<?php
-								while($mostrar_UE=mysqli_fetch_Array($ejecut_consultaUE2)){
-							?>
-								<tr>
-									<td><?php echo $mostrar_UE['name'];?></td>
-							<?php
-								if ($mostrar_UE['id_roll']==1) {
-									$tipo_user="Administrador";
-								}elseif ($mostrar_UE['id_roll']==2) {
-									$tipo_user="Cobrador";
-								}elseif ($mostrar_UE['id_roll']==3) {
-									$tipo_user="Deudor";
-								}if ($mostrar_UE['status'] == 1) {
-									$status='<td class="tdactive"><span class="icon-check"></span></td>';
-								}elseif ($mostrar_UE['status'] == 0)  {
-									$status='<td class="tdinactive"><span class="icon-cross"></span></td>';
-								}
-								// Para habilitar el editar el usuer
-							?>
-									<td><?php echo $tipo_user; ?></td>
-									<?php echo $status;?>
-							<?php
-									if($mostrar_usu['id_roll']==1){
-							?>
-									<td><a href="../php/editUser.php?id_user=<?php echo $mostrar_UE['id_user'];?>"><span class="icon-creative-commons-share"></span></a></td>
-							<?php		
-									}
-							?>
-								</tr>
-							<?php		
-								}
-							?>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>		
+            <hr>
+		</div>	
 	
-	<?php } include '../includes/footer.php'; ?>
+	<?php include '../includes/footer.php'; ?>
   </div>
 
   <div class="gototop js-top">
