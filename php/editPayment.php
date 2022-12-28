@@ -177,35 +177,45 @@
                                     $idPayment = uniqid();
                                     $quantityRes = $mostrarP['total_quantity'];
                                     $formaP = 'Efectivo';
+                                    $cupo = $mostrarP['quantity'];
                                     
-                                    // Restarle a la deuda y setear todo de nuevo //
-                                    // insertar datos y registrar el pago
-                                    $insertPayment = mysqli_query($conexion,"INSERT INTO payment(id_payment,id_newuser,nit_user,name,address,quantity,phone_user,id_userRegis,razon_abono,forma_pago) VALUES('$idPayment','$id_newuser','$nit_user','$name','$address','$quantityRes','$phone_user','$id_userRegis',2,'$formaP')");
+                                    if ($quantityRes > $cupo) {
+                                        echo '
+                                            <div class="alert alert-danger text-center">
+                                                <p><span class="icon-warning"> </span>El monto que debe es mayor al cupo. </p> <a href="javascript:history.go(-1)"> <br> Vale.</a>
+                                            </div>    
+                                            ';
+                                    }else {
 
-                                    if ($insertPayment) {
-                                
-                                        $quantityResult = $mostrarP['quantity']+$mostrarP['interests'];
-                                        $editarPay = mysqli_query($conexion,"UPDATE balance SET total_quantity='$quantityResult', date_renov = NOW() WHERE id_newuser='$id_newuser'");
+                                        // Restarle a la deuda y setear todo de nuevo //
+                                        // insertar datos y registrar el pago
+                                        $insertPayment = mysqli_query($conexion,"INSERT INTO payment(id_payment,id_newuser,nit_user,name,address,quantity,phone_user,id_userRegis,razon_abono,forma_pago) VALUES('$idPayment','$id_newuser','$nit_user','$name','$address','$quantityRes','$phone_user','$id_userRegis',2,'$formaP')");
 
-                                        if ($editarPay) {
-                                            echo '
-                                                <div class="alert alert-success text-center">
-                                                    <p><span class="icon-check"> </span>Pago Registrado exitosamente. </p> <a href="../vistasnew/saldoPendiente.php"><br> Vale.</a>
-                                                </div>    
-                                                ';
+                                        if ($insertPayment) {
+                                    
+                                            $quantityResult = $mostrarP['quantity']+$mostrarP['interests'];
+                                            $editarPay = mysqli_query($conexion,"UPDATE balance SET total_quantity='$quantityResult', date_renov = NOW() WHERE id_newuser='$id_newuser'");
+
+                                            if ($editarPay) {
+                                                echo '
+                                                    <div class="alert alert-success text-center">
+                                                        <p><span class="icon-check"> </span>Pago Registrado exitosamente. </p> <a href="../vistasnew/saldoPendiente.php"><br> Vale.</a>
+                                                    </div>    
+                                                    ';
+                                            }else {
+                                                echo '
+                                                    <div class="alert alert-danger text-center">
+                                                        <p><span class="icon-warning"> </span>¡¡Algo Falló en la resta del pago!!</p><a href="javascript:history.go(-1)"> <br> Vale.</a>
+                                                    </div>    
+                                                    ';
+                                            }
                                         }else {
                                             echo '
                                                 <div class="alert alert-danger text-center">
-                                                    <p><span class="icon-warning"> </span>¡¡Algo Falló en la resta del pago!!</p><a href="javascript:history.go(-1)"> <br> Vale.</a>
+                                                    <p><span class="icon-warning"> </span>¡Algo Falló en el registro del pago!</p><a href="javascript:history.go(-1)"> <br> Vale.</a>
                                                 </div>    
                                                 ';
                                         }
-                                    }else {
-                                        echo '
-                                            <div class="alert alert-danger text-center">
-                                                <p><span class="icon-warning"> </span>¡Algo Falló en el registro del pago!</p><a href="javascript:history.go(-1)"> <br> Vale.</a>
-                                            </div>    
-                                            ';
                                     }
                                 }
                             }
@@ -233,7 +243,7 @@
                             <div class="row form-group text-center dp-flex jfy-ctn-center">
                                 <div class="col-md-8">
                                     <input type="submit" class="btn btn-success btn-lg btn-block" name="btnRegisVal" value="Enviar abono">
-                                    <input type="submit" class="btn btn-primary btn-lg btn-block" name="btnRenovCred" value="Renovar crédito">
+                                    <a class="btn btn-primary btn-lg btn-block" id="btn-abrir-popup2">Renovar crédito</a>
                                 </div>
                             </div>
                         </form>
@@ -242,7 +252,24 @@
 			</div>
             <hr>
 		</div>	
-	
+        <!-----------------------------------------  Popup para alerta de renovar ----------------------------------------->
+				<div class="overlay" id="overlay2P">
+					<div class="popup" id="popup2P">
+						<a class="btn-cerrar-popup" id="btn-cerrar-popup2P"><i class="icon-cross"></i></a>
+						<h3>¿Confirma renovar el crédito? </h3>
+						<div class="content_enlaces">
+                            <form  action="#" method="POST">
+                                <div class="row">
+                                    <div class="col-6 mgy-6">
+                                        <input type="submit" class="btn btn-success" name="btnRenovCred" value="Renovar crédito">
+                                        <input type="button" class="btn btn-danger"  id="btn-cerrar-popup2_1P" value="Cancelar">
+                                    </div>
+                                </div>
+                            </form>
+						</div>
+					</div>
+				</div>
+			<!----------------------------------------- / Popup para alerta de renovar ----------------------------------------->               
 	<?php include '../includes/footer.php'; ?>
   </div>
 

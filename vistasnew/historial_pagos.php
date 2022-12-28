@@ -168,8 +168,6 @@
                                                     <?php if ($mostrar_usu['id_roll']==1){ ?>
                                                     <th scope="col">ID Pago</th>
                                                     <?php } ?>
-                                                    <th scope="col">Nombre</th>
-                                                    <th scope="col">Dirección</th>
                                                     <th scope="col">Pagó</th>
                                                     <th scope="col">Razón Pago</th>
                                                     <th scope="col">Forma Pago</th>

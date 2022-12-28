@@ -220,8 +220,6 @@ function consultarPagosLista($status,$usu_id=false){
                             <?php if($mostrar_usu['id_roll']==1){ ?>
                             <td><?php echo $mostrarPagos['id_payment']; ?></td>
                             <?php } ?>
-                            <td><?php echo $mostrarPagos['name']; ?></td>
-                            <td><?php echo $mostrarPagos['address']; ?></td>
                             <td><?php echo formatoAPrecio($mostrarPagos['quantity']); ?></td>
                             <td><?php echo consultarRazonAbono($mostrarPagos['razon_abono']); ?></td>
                             <td><?php echo $mostrarPagos['forma_pago']; ?></td>

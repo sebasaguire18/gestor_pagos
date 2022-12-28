@@ -72,6 +72,7 @@
     color: #D10024;
     text-decoration: none;
     outline: none;
+    cursor: pointer;
 }
 .popup h3{
     font-size: 30px;
