@@ -132,7 +132,7 @@
                                         </tr>
                                         <tr>
                                             <th class="bg-white text-black">Cupo</th>
-                                            <th><?php echo formatoAPrecio($mostrarDHU['quantity']); ?></th>
+                                            <th><?php echo formatoAPrecio($mostrarDHU['b_quantity']); ?></th>
 
                                         </tr>
                                         <tr>
@@ -165,9 +165,7 @@
                                         <table class="table table-striped tblPagosRealizados">
                                             <thead class="thead-dark text-center">
                                                 <tr>
-                                                    <?php if ($mostrar_usu['id_roll']==1){ ?>
                                                     <th scope="col">ID Pago</th>
-                                                    <?php } ?>
                                                     <th scope="col">Pagó</th>
                                                     <th scope="col">Razón Pago</th>
                                                     <th scope="col">Forma Pago</th>

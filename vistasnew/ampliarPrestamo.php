@@ -4,6 +4,7 @@
   include '../function/select_usuario.php';
   include '../function/select_usuario_ex.php';
   include '../function/select_notifications.php';
+  include '../function/funciones.php';
   include '../php/mostrarfecha.php';
 
   if($_SESSION['usuario']){
@@ -78,22 +79,23 @@
 							$id_extendLoan=$_POST['id_extendLoan'];
 
 							// traer datos del ampliar prestamo de la tabla extendloan
-							$consultaUN="SELECT * FROM extendloan WHERE id_extendLoan='$id_extendLoan'";
-							$ejecut_consultaUN=mysqli_query($conexion,$consultaUN);
-							$mostrar_UN=mysqli_fetch_Array($ejecut_consultaUN);
-							$verifConsultUN=mysqli_num_rows($ejecut_consultaUN);
+							$consultaUN = mysqli_query($conexion,"SELECT * FROM extendloan WHERE id_extendLoan='$id_extendLoan'");
+							$mostrar_UN = mysqli_fetch_Array($consultaUN);
+							$verifConsultUN = mysqli_num_rows($consultaUN);
 
+							$id_newuserB = $mostrar_UN['id_newuser'];
+
+							// para poder traer los datos del usuario
+							$consultarUAPP = mysqli_query($conexion,"SELECT * FROM balance WHERE id_newuser='$id_newuserB'");
+							$mostrar_UAPP = mysqli_fetch_array($consultarUAPP);
 
 							// Para cambiar el formato de fecha
-							$dateDatabase=date_create($mostrar_UN['date']);
-							$date = date_format($dateDatabase, "d/F/Y - h:i a");
+							$date = formatoAFecha($mostrar_UN['date'],1);
 
 							// Para cambiar el formato de los precios
-							$quantityPNumber=$mostrar_UN['quantityP'];
-							$quantityP=number_format($quantityPNumber,0,",",".");
+							$quantityP=formatoAPrecio($mostrar_UN['quantityP']);
 							
-							$quantityLoanNumber=$mostrar_UN['quantityLoan'];
-                			$quantityLoan=number_format($quantityLoanNumber,0,",",".");
+                			$quantityLoan=formatoAPrecio($mostrar_UN['quantityLoan']);
 
 							if ($verifConsultUN==0) {
 					?>
@@ -104,7 +106,7 @@
 							<form action="#" method="POST">
 								<div class="row form-group">
 									<div class="col-md-12">
-										<label for="id_newuser">ID del Prestamo:</label>
+										<label for="id_newuser">ID de la Solicitud:</label>
 										<input type="text" disabled class="form-control" value="<?php echo $mostrar_UN['id_extendLoan']; ?>">
 									</div>
 								</div>
@@ -137,13 +139,19 @@
 								<div class="row form-group">
 									<div class="col-md-12">
 										<label for="nit_user">Cantidad que el Usuario Debe:</label>
-										<input type="text" disabled name="quantity" class="form-control" value="$ <?php echo $quantityP; ?>">
+										<input type="text" disabled name="quantity" class="form-control" value="<?php echo $quantityP; ?>">
 									</div>
 								</div>
 								<div class="row form-group">
 									<div class="col-md-12">
 										<label for="nit_user">Cantidad que el Usuario requiere:</label>
-										<input type="text" disabled name="quantity" class="form-control" value="$ <?php echo $quantityLoan; ?>">
+										<input type="text" disabled name="quantity" class="form-control" value="<?php echo $quantityLoan; ?>">
+									</div>
+								</div>
+								<div class="row form-group">
+									<div class="col-md-12">
+										<label for="nit_user">Cupo actual:</label>
+										<input type="text" disabled name="quantity" class="form-control" value="<?php echo formatoAPrecio($mostrar_UAPP['b_quantity']); ?>">
 									</div>
 								</div>
 								<div class="row form-group">
@@ -227,7 +235,7 @@
 									if ($mostrar_UD['status'] == 1) {
 										$status='<td class="tdactive"><span class="icon-check"></span></td>';
 								?>
-										<td><a href="../php/detalleUserP.php?idUser=<?php echo $mostrar_UD["id_user"]."&idNewUser=".$mostrar_UD["id_newuser"];?>"><?php echo $mostrar_UD["name"];?></a></td>
+										<td><a href="../php/detalleUserP.php?idNewUser=<?php echo $mostrar_UD["id_newuser"];?>"><?php echo $mostrar_UD["name"];?></a></td>
 								<?php
 									}elseif ($mostrar_UD['status'] == 0)  {
 										$status='<td style="background: rgba(255, 235, 53, 0.6);"><span class="icon-warning"></span></td>';
@@ -237,7 +245,7 @@
 									}elseif ($mostrar_UD['status'] == 2)  {
 										$status='<td class="tdinactive"><span class="icon-cross"></span></td>';
 								?>
-										<td><a href="../php/detalleUserP.php?idUser=<?php echo $mostrar_UD["id_user"]."&idNewUser=".$mostrar_UD["id_newuser"];?>"><?php echo $mostrar_UD["name"];?></a></td>
+										<td><a href="../php/detalleUserP.php?idNewUser=<?php echo $mostrar_UD["id_newuser"];?>"><?php echo $mostrar_UD["name"];?></a></td>
 								<?php
 									}
 								?>	
@@ -261,35 +269,39 @@
 										if ($status==2) {
 								?>		
 										<hr>
-										<p class="mes_false">Favor menciona el ¿Porqué? has rechazado la solicitud.</p>
-										<form action="#" method="POST">
-											<div class="row form-group">
-												<div class="col-md-12">
-													<label for="name">La razón es:</label>
-													<input type="text" id="why" name="why" class="form-control" placeholder="Éste es un porque!">
+										<div class="alert alert-danger mgt-6 text-center">
+											<p><span class="icon-warning"></span>Favor menciona el ¿Porqué? has rechazado la solicitud.</p>
+											<hr>
+											<form action="#" method="POST">
+												<div class="row form-group">
+													<div class="col-md-12">
+														<label for="name">La razón es:</label>
+														<input type="text" id="why" name="why" class="form-control" placeholder="Éste es un porque!">
+													</div>
 												</div>
-											</div>
-											<input type="hidden" name="id_extendLoan" value="<?php echo $id_extendLoan; ?>">
-											<div class="form-group">
+												<input type="hidden" name="id_extendLoan" value="<?php echo $id_extendLoan; ?>">
+												<div class="form-group">
 
-												<input type="submit" name="btnRAP" value="Enviar Reporte" class="btn btn-success btn-outline btn-lg">
-												<a href="javascript:history.go(-2);" class="btn btn-warning btn-outline btn-lg">Retroceder</a>
-											</div>
-										</form>
+													<input type="submit" name="btnRAP" value="Enviar Reporte" class="btn btn-success btn-outline btn-lg">
+													<a href="javascript:history.go(-2);" class="btn btn-warning btn-outline btn-lg">Retroceder</a>
+												</div>
+											</form>
+										</div>
 								<?php
 										}elseif ($status==1) {
 											?>		
 											
-											<div class="alert alert-warning">
+											<div class="alert alert-warning mgt-6 text-center">
 												<p><span class="icon-warning"></span> ¿Confirmas Aceptar la Solicitud?</p>
+												<hr>
+												<form action="#" method="POST">
+													<input type="hidden" name="id_extendLoan" value="<?php echo $id_extendLoan; ?>">
+													<div class="form-group">
+														<input type="submit" name="btnAceptar" value="Confirmar Solicitud" class="btn btn-success btn-outline btn-lg">
+														<a href="javascript:history.go(-2);" class="btn btn-warning btn-outline btn-lg">Retroceder</a>
+													</div>
+												</form>
 											</div>
-											<form action="#" method="POST">
-												<input type="hidden" name="id_extendLoan" value="<?php echo $id_extendLoan; ?>">
-												<div class="form-group">
-													<input type="submit" name="btnAceptar" value="Confirmar Solicitud" class="btn btn-success btn-outline btn-lg">
-													<a href="javascript:history.go(-2);" class="btn btn-warning btn-outline btn-lg">Retroceder</a>
-												</div>
-											</form>
 								<?php		
 											
 										}elseif ($status==0) {
@@ -297,10 +309,10 @@
 								
 												<div class="alert alert-info">
 													<p>El usuario no se modificó y sigue con el estado actual.</p>
-												</div>
-												<div class="row form-group">
-													<a href="ampliarPrestamo.php" class="btn btn-success btn-outline btn-lg">Vale</a>
-													<a href="javascript:history.go(-2);" class="btn btn-warning btn-outline btn-lg">Retroceder</a>
+													<div class="row form-group">
+														<a href="ampliarPrestamo.php" class="btn btn-success btn-outline btn-lg">Vale</a>
+														<a href="javascript:history.go(-2);" class="btn btn-warning btn-outline btn-lg">Retroceder</a>
+													</div>
 												</div>
 								<?php
 										}
@@ -308,24 +320,18 @@
 									}
 										// ---------------------  guardo datos en inicio del usuario SI el administrador aprueba la solicitud.
 											if (isset($_POST['btnAceptar'])) {
-												$id_extendLoan=$_POST['id_extendLoan'];
-												$statusN=1;
+												$id_extendLoan = $_POST['id_extendLoan'];
+												$statusN = 1;
 
-												$validarUsuario="SELECT * FROM extendloan WHERE id_extendLoan='$id_extendLoan'";
-												$ejecut_validarU=mysqli_query($conexion,$validarUsuario);
-												$mostrar_UEL=mysqli_fetch_array($ejecut_validarU);
+												$validarUsuario = mysqli_query($conexion,"SELECT * FROM extendloan WHERE id_extendLoan='$id_extendLoan'");
+												$mostrar_UEL = mysqli_fetch_array($validarUsuario);
 
-												$id_userE=$mostrar_UEL['id_user'];
-												$id_newuserE=$mostrar_UEL['id_newuser'];
-												// para poder traer las veces que se han hecho ampliaciones de prestamo
-												$consultarAP="SELECT * FROM balance WHERE id_user='$id_userE' AND id_newuser='$id_newuserE'";
-												$ejecut_consultarAP=mysqli_query($conexion,$consultarAP);
-												$mostrar_CAP=mysqli_fetch_array($ejecut_consultarAP);
+												$id_newuserE = $mostrar_UEL['id_newuser'];
 
-												$row=mysqli_num_rows($ejecut_validarU);
-												if ($row==0) {
+												$row = mysqli_num_rows($validarUsuario);
+												
+												if ($row == 0) {
 								?>
-													
 													<div class="alert alert-danger">
 														<p><span class="icon-remove-user"> </span>La solicitud ha sido borrada o hubo algún fallo.</p><a class="volver" href="javascript:history.go(-3);">Volver</a>
 													</div>
@@ -333,38 +339,69 @@
 												}else{
 													
 													// actualizar el estado de la solicitud
-													$updateStatusEL="UPDATE extendloan SET status='$statusN' WHERE id_extendLoan='$id_extendLoan'";
-													$ejecut_updateStatusEL=mysqli_query($conexion,$updateStatusEL);
+													$updateStatusEL = "UPDATE extendloan SET status='$statusN' WHERE id_extendLoan='$id_extendLoan'";
+													$ejecut_updateStatusEL = mysqli_query($conexion,$updateStatusEL);
 													
-													$quantity_b=$mostrar_CAP['quantity'];
-													$quantity=$mostrar_UEL['quantityLoan']+$quantity_b;
-
-													$update_q=$mostrar_CAP['update_q']+$quantity_b;
-													$quantity_u=$mostrar_CAP['quantity_u']+1;
-
-													$interests_AP=$quantity_b*0.1;
-													$interests=$interests_AP+$mostrar_CAP['interests'];
-
-
-													// actualizar el nuevo prestamo (Ampliar Nuevo Prestamo) en la tabla balance
-													$updateStatusANP="UPDATE balance SET update_q='$update_q', quantity='$quantity', interests='$interests', quantity_u='$quantity_u'  WHERE id_user='$id_userE' AND id_newuser='$id_newuserE'";
-													$ejecut_updateStatusANP=mysqli_query($conexion,$updateStatusANP);
-
-
-													if ($ejecut_updateStatusEL && $ejecut_updateStatusANP) {					
-								?>
+													if ($ejecut_updateStatusEL) {
 														
-														<div class="alert alert-success">
-															<p><span class="icon-check"> </span>Prestamo Aceptado exitosamente.<a class="volver" href="../vistasnew/ampliarPrestamo.php">OK</a></p>
-														</div>
-								<?php					
-													}else{
-								?>
+														// para poder traer los datos del usuario
+														$consultarAP = mysqli_query($conexion,"SELECT * FROM balance WHERE id_newuser='$id_newuserE'");
+														$mostrar_CAP = mysqli_fetch_array($consultarAP);
+
+														$name=$mostrar_CAP['name'];
+														$address=$mostrar_CAP['address'];
+														$phone_user=$mostrar_CAP['phone_user'];
+														$nit_user=$mostrar_CAP['nit_user'];
+														$id_userRegis=$mostrar_usu['id_user'];
+														$idPayment = uniqid();
+														$quantityRes = $mostrar_CAP['total_quantity'];
+														$formaP = 'Efectivo';
+														$cupo = $mostrar_CAP['b_quantity'];
+														$cantidadActualizacion = $mostrar_CAP['quantity_u']+1;
+
 														
-														<div class="alert alert-danger">
-															<p><span class="icon-cross"> </span>Error al Actualizar el Prestamo.</p><a class="volver" href="javascript:history.go(-2);">Volver</a>
-														</div>
-								<?php		
+														$cupoAP = $mostrar_UEL['quantityLoan'];
+														$interests_AP = $cupoAP*0.2;
+
+														$quantity_u = $cupoAP+$interests_AP;
+														
+														if ($quantityRes > $cupoAP) {
+															echo '
+																<div class="alert alert-danger text-center">
+																	<p><span class="icon-warning"> </span>El monto que debe es mayor al nuevo cupo solicitado. </p> <a href="javascript:history.go(-1)"> <br> Vale.</a>
+																</div>    
+																';
+														}else {
+
+															// Restarle a la deuda y setear todo de nuevo //
+															// insertar datos y registrar el pago
+															$insertPayment = mysqli_query($conexion,"INSERT INTO payment(id_payment,id_newuser,nit_user,name,address,quantity,phone_user,id_userRegis,razon_abono,forma_pago) VALUES('$idPayment','$id_newuserE','$nit_user','$name','$address','$quantityRes','$phone_user','$id_userRegis',3,'$formaP')");
+
+															if ($insertPayment) {
+
+																// actualizar el nuevo prestamo (Ampliar Nuevo Prestamo) en la tabla balance
+																$updateStatusANP = "UPDATE balance SET b_quantity='$cupoAP', interests='$interests_AP', total_quantity='$quantity_u', update_q = '$cupo', quantity_u = '$cantidadActualizacion', date_renov = NOW() WHERE id_newuser='$id_newuserE'";
+																$ejecut_updateStatusANP = mysqli_query($conexion,$updateStatusANP);
+
+
+																if ($ejecut_updateStatusANP) {					
+											?>
+																	<div class="alert alert-success text-center mgt-6">
+																		<p><span class="icon-check"> </span>Prestamo Aceptado exitosamente, datos actualizados.</p>
+																		<br>
+																		<a class="volver" href="../vistasnew/ampliarPrestamo.php">OK</a>
+																	</div>
+											<?php					
+																}else{
+											?>
+																	<div class="alert alert-danger">
+																		<p><span class="icon-cross"> </span>Error al Actualizar el Prestamo. error002.</p><a class="volver" href="javascript:history.go(-2);">Volver</a>
+																	</div>
+											<?php		
+																}
+														
+															}
+														}
 													}
 												}
 											}elseif (isset($_POST['btnRAP'])) {
@@ -432,23 +469,26 @@
 													<td class="titleEdit">Identificación</td>
 													<td class="titleEdit">Nombre</td>
 													<td class="titleEdit">Contacto</td>
+													<td class="titleEdit">Cupo</td>
 													<td class="titleEdit">Deuda</td>
-													<td class="titleEdit"></td>
+													<td class="titleEdit">Acción</td>
 												</tr>
 											</thead>
 				<?php
 										while ($mostrarP=mysqli_fetch_array($ejecut_consultaP)) {
 
-											$saldoTotalNumero=$mostrarP['quantity']+$mostrarP['interests'];
-											$saldoTotal=number_format($saldoTotalNumero,0,",",".");
 									?>	
 											
 											<tr>
 												<td><?php echo $mostrarP['nit_user']; ?></td>
 												<td><?php echo $mostrarP['name']; ?></td>
 												<td><?php echo $mostrarP['phone_user']; ?></td>
-												<td><?php echo $saldoTotal; ?></td>
-												<td><a href="../php/solitAmpliarP.php?id_user=<?php echo $mostrarP['id_user'] ."&id_newuser=" . $mostrarP['id_newuser'];?>"><span style="font-size: 30px;" class="icon-hand"></span></a></td>
+												<td><?php echo formatoAPrecio($mostrarP['b_quantity']); ?></td>
+												<td><?php echo formatoAPrecio($mostrarP['total_quantity']); ?></td>
+												<td>
+													<a title="Ampliar Crédito" href="../php/solitAmpliarP.php?accion='ampliar'&id_newuser=<?php echo $mostrarP['id_newuser'];?>"><span style="font-size: 30px;" class="icon-arrow-up"></span></a>
+													<a title="Reducir Crédito" href="../php/solitAmpliarP.php?accion='reducir'&id_newuser=<?php echo $mostrarP['id_newuser'];?>"><span style="font-size: 30px;" class="icon-arrow-down"></span></a>
+												</td>
 											</tr>
 									<?php
 										}
@@ -480,7 +520,7 @@
 									if ($mostrar_UD['status'] == 1) {
 										$status='<td class="tdactive"><span class="icon-check"></span></td>';
 								?>
-										<td><a href="../php/detalleUserP.php?idUser=<?php echo $mostrar_UD["id_user"]."&idNewUser=".$mostrar_UD["id_newuser"];?>"><?php echo $mostrar_UD["name"];?></a></td>
+										<td><a href="../php/detalleUserP.php?idNewUser=<?php echo $mostrar_UD["id_newuser"];?>"><?php echo $mostrar_UD["name"];?></a></td>
 								<?php
 									}elseif ($mostrar_UD['status'] == 0)  {
 										$status='<td style="background: rgba(255, 235, 53, 0.6);"><span class="icon-warning"></span></td>';
@@ -490,7 +530,7 @@
 									}elseif ($mostrar_UD['status'] == 2)  {
 										$status='<td class="tdinactive"><span class="icon-cross"></span></td>';
 								?>
-										<td><a href="../php/detalleUserP.php?idUser=<?php echo $d["id_user"]."&idNewUser=".$mostrar_UD["id_newuser"];?>"><?php echo $mostrar_UD["name"];?></a></td>
+										<td><a href="../php/detalleUserP.php?idNewUser=<?php echo $d["id_newuser"];?>"><?php echo $mostrar_UD["name"];?></a></td>
 								<?php
 									}
 								?>	
@@ -534,13 +574,13 @@
 											$objeto_DateTime=date_create($mostrarP['date']);
 											$date = date_format($objeto_DateTime, "j/M - h:i a");
 											
-											$pagoNumero=$mostrarP['quantity'];
+											$pagoNumero=$mostrarP['b_quantity'];
 											$pago=number_format($pagoNumero,0,",",".");
 											
 											$interestsNumero=$mostrarP['interests'];
 											$interests=number_format($interestsNumero,0,",",".");
 
-											$saldoTotalNumero=$mostrarP['quantity']+$mostrarP['interests'];
+											$saldoTotalNumero=$mostrarP['b_quantity']+$mostrarP['interests'];
 											$saldoTotal=number_format($saldoTotalNumero,0,",",".");
 									?>	
 										<table class="tableUserEdit">

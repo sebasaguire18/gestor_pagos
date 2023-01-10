@@ -130,7 +130,7 @@
                                 </tr>
                                 <tr>
                                     <td class="titleEdit">Cupo Crédito</td>
-                                    <td><?php echo formatoAPrecio($mostrar_UDT['quantity']); ?></td>
+                                    <td><?php echo formatoAPrecio($mostrar_UDT['b_quantity']); ?></td>
                                 </tr>
                                 <tr>
                                     <td class="titleEdit">Interés del cupo</td>

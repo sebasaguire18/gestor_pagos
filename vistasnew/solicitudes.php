@@ -314,12 +314,12 @@
 														$address=$mostrar_UN['address'];
 														$nitUser=$mostrar_UN['nit_user'];
 														$phoneUser=$mostrar_UN['phone_user'];
-														$quantity=$mostrar_UN['quantity'];	
+														$quantity=$mostrar_UN['b_quantity'];	
 														$interests=$quantity*0.2;
 														$total_quantity=$quantity+$interests;
 													
 														// insertar el saldo a prestar del usuario
-														$insertSU="INSERT INTO balance(id_balance,id_newuser,name,address,nit_user,phone_user,quantity,interests,total_quantity) VALUES('$idBalance','$id_newuser','$name','$address','$nitUser','$phoneUser','$quantity','$interests','$total_quantity')";
+														$insertSU="INSERT INTO balance(id_balance,id_newuser,name,address,nit_user,phone_user,b_quantity,interests,total_quantity) VALUES('$idBalance','$id_newuser','$name','$address','$nitUser','$phoneUser','$quantity','$interests','$total_quantity')";
 														$ejecut_insertSU=mysqli_query($conexion,$insertSU);
 														
 														if ($ejecut_insertSU) {

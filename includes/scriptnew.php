@@ -72,6 +72,15 @@
                 responsive: "true",
             });
 
+			// cargar tabla de pagos totales de la pagina mostrar pagos
+            $('.tblPagosTotalesRealizados').DataTable({
+                "language": {
+                    "url": "../datatables/Spanish.json"
+                },
+                responsive: "true",
+				"order": [ 0, 'desc' ],
+            });
+
 			// cargar tabla de ciudades
             $('#tbCiudades').DataTable({
                 "language": {

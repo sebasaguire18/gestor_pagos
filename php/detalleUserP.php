@@ -70,20 +70,14 @@
 			<div class="row row-pb-md">
 				<div class="col-md-6 animate-box">
                 <?php
-                    if (isset($_GET['idUser']) || isset($_GET['idNewUser'])) {
-                        $idUser=$_GET['idUser'];
+                    if (isset($_GET['idNewUser'])) {
                         $idNewUser=$_GET['idNewUser'];
 
                         // consultar los detalles del usuario User detalles
-                        $consultaUDT="SELECT * FROM extendloan WHERE id_user='$idUser' AND id_newuser='$idNewUser'";
+                        $consultaUDT="SELECT * FROM extendloan WHERE id_newuser='$idNewUser'";
                         $ejecut_consultaUDT=mysqli_query($conexion,$consultaUDT);
                         $mostrar_UDT=mysqli_fetch_Array($ejecut_consultaUDT);
                         
-                        // consultar los detalles del usuario User detalles de la tabla inicio para el login
-                        $consultaUDTI="SELECT * FROM inicio WHERE id_user='$idUser'";
-                        $ejecut_consultaUDTI=mysqli_query($conexion,$consultaUDTI);
-						$mostrar_UDTI=mysqli_fetch_Array($ejecut_consultaUDTI);
-						$validarUsuarioDTI=mysqli_num_rows($ejecut_consultaUDTI);
                     
                         // Para cambiar el formato de fecha
 						$dateDatabase=date_create($mostrar_UDT['date']);
@@ -98,11 +92,6 @@
                 		}elseif ($mostrar_UDT['status'] == 2)  {
 									$statusUDT='<td class="tdinactive">Rechazada</td>';
 						}	
-						if ($mostrar_UDTI['status'] == 1) {
-									$statusUDTI='<td class="tdactive">Activo</td>';
-						}elseif ($mostrar_UDTI['status'] == 0)  {
-									$statusUDTI='<td class="tdinactive">Inactivo</td>';
-						}
                         if ($mostrar_UDT['status'] == 1 || $mostrar_UDT['status']==2) {
                 ?>
 					<h3 class="tittle_form1">Estos son los detalles del usuario</h3>
@@ -145,39 +134,7 @@
                                 <tr>    
                                     <td class="titleEdit">Solicitud</td>
                                     <?php echo $statusUDT; ?>
-								</tr>
-								<!-- mostrar el estado si el usuario existe en la tabla de inicio de sesión -->
-									<?php
-										if ($validarUsuarioDTI==1) {
-										?>
-									<tr>    
-										<td class="titleEdit">Estado</td>
-										<?php echo $statusUDTI; ?>
-									</tr>
-									<tr>
-										<?php if ($mostrar_UDT['status'] == 1)  { ?>
-											<td class="titleEdit">Correo de inicio de sesión</td>
-											<td><?php echo $mostrar_UDTI['email']; ?></td>
-										<?php } ?>  
-									</tr>
-									<tr>
-										<?php if ($mostrar_UDT['status'] == 1)  { ?>
-											<td class="titleEdit">Contraseña</td>
-											<td><?php echo $mostrar_UDTI['pass']; ?></td>
-										<?php } ?> 
-									</tr>
-									<?php
-										}else{
-									?>
-									<tr>    
-										<td class="titleEdit">Estado</td>
-										<td class="tdinactive">Eliminado de la plataforma</td>
-									</tr>
-									<?php
-										}
-									?>
-								<!-- fin mostrar el estado si el usuario existe en la tabla de inicio de sesión -->
-                               
+								</tr>                               
 							</table>
                             <?php
                                 }else {

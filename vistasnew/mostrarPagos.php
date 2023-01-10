@@ -3,6 +3,7 @@
   include '../function/select_usuario.php';
   include '../function/select_usuario_ex.php';
   include '../function/select_notifications.php';
+  include '../function/funciones.php';
   include '../php/mostrarfecha.php';
 
   if($_SESSION['usuario']){
@@ -89,89 +90,42 @@
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2 text-center">
 					<div class="gtco-section">
-							<form action="#" method="POST" class="col-md-12 col-4">
-								<div class="row form-group">
-									<div class="col-md-8">
-										<input type="date" class="form-control" name="date">
-									</div>
-									<div class="col-md-4">
-										<input type="submit" class="btn btn-success" name="btnFiltrar" value="Filtrar">
-									</div>
+							<div class="row form-group text-center">
+								<div class="col-md-12">
+									<h4 class="col-md-12 ">Fecha: <?php echo dateToday(); ?>.</h4>
 								</div>
-								<div class="row form-group text-center">
-									<div class="col-md-12">
-										<h4 class="col-md-12 ">Fecha: <?php echo dateToday(); ?>.</h4>
-									</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<h3 class="tittle_form1 col-md-12 ">Pagos.</h3>
 								</div>
-
-							</form>
-							<h3 class="tittle_form1 col-md-12 ">Pagos.</h3>
-
-
-								<table class="tableUserEdit">
-									<tr>
-										<td class="titleEdit">Nombre</td>
-										<td class="titleEdit">Dirección</td>
-										<td class="titleEdit">Pago</td>
-										<td class="titleEdit">Fecha</td>
-									</tr>
-									<?php 
-
-										
-											// consultar los pagos
-											$consultaP="SELECT * FROM payment";
-											$ejecut_consultaP=mysqli_query($conexion,$consultaP);
-											$num_rows=mysqli_num_rows($ejecut_consultaP);
-			
-											//------------------------------ paginación -------------------------------------------
-											$filasXPagina=15;
-											$paginasS=$num_rows/$filasXPagina;
-											$paginas=ceil($paginasS);
-
-											$iniciar=($_GET['pagina']-1)*$filasXPagina;
-
-											$consultaPN="SELECT * FROM payment ORDER BY date DESC LIMIT $iniciar,$filasXPagina";
-											$ejecut_consultaPN=mysqli_query($conexion,$consultaPN);
-
-											while ($mostrarP=mysqli_fetch_array($ejecut_consultaPN)) {
-												
-												$objeto_DateTime=date_create($mostrarP['date']);
-												$date = date_format($objeto_DateTime, "j/M - h:i a");	
-
-												$pagoNumero=$mostrarP['quantity'];
-												$pago=number_format($pagoNumero,0,",",".");
-									?>
-											<tr>
-												<td><?php echo $mostrarP['name']. " &#8212 Cel: <a href='tel:".$mostrarP['phone_user']."'> " . $mostrarP['phone_user']; ?></a></td>
-												<td><?php echo $mostrarP['address']; ?></td>
-												<td><?php echo "$ ".$pago; ?></td>
-												<td><?php echo $date; ?></td>
-									<?php
-												if($mostrar_usu['id_roll']==1){
-									?>
-												<td><a href="../php/detallePago.php?id_payment=<?php echo $mostrarP['id_payment'];?>"><span class="icon-creative-commons-share"></span></a></td>
-									<?php		
-												}
-									?>
-											</tr>
-									<?php
-											}
-									?>
-								</table>
-								<nav aria-label="Page navigation example">
-									<ul class="pagination">
-										<li class="page-item" <?php echo $_GET['pagina']<=1? 'style="visibility:hidden;"' : '' ?> ><a class="page-link" href="mostrarPagos.php?pagina=<?php echo $_GET['pagina']-1; ?>">Anterior</a></li>
-										<?php
-											for($count=0; $count < $paginas; $count++) { 
-										?>
-												<li class="page-item <?php echo $_GET['pagina']==$count+1 ?'active' : '' ?>"><a class="page-link" href="mostrarPagos.php?pagina=<?php echo $count+1; ?>"><?php echo $count+1; ?></a></li>
-										<?php		
-											}
-										?>
-										
-										<li class="page-item" <?php echo $_GET['pagina']>=$paginas? 'style="visibility:hidden;"' : '' ?>><a class="page-link" href="mostrarPagos.php?pagina=<?php echo $_GET['pagina']+1; ?>">Siguiente</a></li>
-									</ul>
-								</nav>
+								<div class="col-md-12">
+									<div class="part">
+										<div class="table-responsive-xl">
+											<table class="table table-striped tblPagosTotalesRealizados">
+												<thead class="thead-dark text-center">
+													<tr>
+														<th class="hidenP">ID Pago</th>
+														<th scope="col">Pagó</th>
+														<th scope="col">Dirección</th>
+														<th scope="col">Razón Pago</th>
+														<th scope="col">Forma Pago</th>
+														<th scope="col">Fecha</th>
+														<?php if($mostrar_usu['id_roll']==1){ ?>
+														<th scope="col"></th>
+														<?php } ?>
+													</tr>
+												</thead>
+												<tbody class="text-center">
+													<?php
+														consultarPagosLista(3);
+													?>
+												</tbody>
+											</table>
+										</div>
+									</div> 
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

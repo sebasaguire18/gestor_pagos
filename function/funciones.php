@@ -203,9 +203,9 @@ function consultarPagosLista($status,$usu_id=false){
 
         if ($usu_id) {
             if ($status == 3) {
-                $ejecut_consultaPayment=mysqli_query($conexion,"SELECT * FROM payment WHERE nit_user = $usu_id ORDER BY date DESC");
+                $ejecut_consultaPayment=mysqli_query($conexion,"SELECT * FROM payment WHERE nit_user = $usu_id ORDER BY id_payment DESC");
             }else {
-                $ejecut_consultaPayment= mysqli_query($conexion,"SELECT * FROM payment WHERE nit_user = $usu_id AND status = $status ORDER BY date DESC");
+                $ejecut_consultaPayment= mysqli_query($conexion,"SELECT * FROM payment WHERE nit_user = $usu_id AND status = $status ORDER BY id_payment DESC");
             }
             
             while ($mostrarPagos = mysqli_fetch_array($ejecut_consultaPayment)) {
@@ -217,9 +217,7 @@ function consultarPagosLista($status,$usu_id=false){
                 }
             ?>
                         <tr>
-                            <?php if($mostrar_usu['id_roll']==1){ ?>
                             <td><?php echo $mostrarPagos['id_payment']; ?></td>
-                            <?php } ?>
                             <td><?php echo formatoAPrecio($mostrarPagos['quantity']); ?></td>
                             <td><?php echo consultarRazonAbono($mostrarPagos['razon_abono']); ?></td>
                             <td><?php echo $mostrarPagos['forma_pago']; ?></td>
@@ -229,9 +227,9 @@ function consultarPagosLista($status,$usu_id=false){
             }
         }else{
             if ($status == 3) {
-                $ejecut_consultaPayment=mysqli_query($conexion,"SELECT * FROM payment ORDER BY date DESC");
+                $ejecut_consultaPayment=mysqli_query($conexion,"SELECT * FROM payment ORDER BY id_payment DESC");
             }else {
-                $ejecut_consultaPayment= mysqli_query($conexion,"SELECT * FROM payment WHERE status = $status ORDER BY date DESC");
+                $ejecut_consultaPayment= mysqli_query($conexion,"SELECT * FROM payment WHERE status = $status ORDER BY id_payment DESC");
             }
             
             while ($mostrarPagos = mysqli_fetch_array($ejecut_consultaPayment)) {
@@ -243,14 +241,14 @@ function consultarPagosLista($status,$usu_id=false){
                 }
             ?>
                         <tr>
-                            <td><?php echo $mostrarPagos['id_payment']; ?></td>
+                            <td class="hidenP"><?php echo $mostrarPagos['id_payment']; ?></td>
                             <td><?php echo $mostrarPagos['name'];?> &#8212 Cel: <a href='tel:<?php echo $mostrarPagos['phone_user'];?>'> <?php echo $mostrarPagos['phone_user']; ?></a></td>
                             <td><?php echo $mostrarPagos['address']; ?></td>
                             <td><?php echo formatoAPrecio($mostrarPagos['quantity']); ?></td>
                             <td><?php echo consultarRazonAbono($mostrarPagos['razon_abono']); ?></td>
                             <td><?php echo formatoAFecha($mostrarPagos['date'],1); ?></td>
                             <?php if($mostrar_usu['id_roll']==1){ ?>
-                            <td><a href="../php/detallePago.php?id_payment=<?php echo $mostrarPagos['id_payment'];?>"><span class="icon-creative-commons-share"></span></a></td>
+                            <td><a title="Ver Detalles" href="../php/detallePago.php?id_payment=<?php echo $mostrarPagos['id_payment'];?>"><span class="icon-plus h2"></span></a></td>
                             <?php } ?>
                         </tr>
             <?php
@@ -350,6 +348,8 @@ function consultarRazonAbono($razon_id){
         return 'Abono a deuda'; 
     }elseif ($razon_id == '2' || $razon_id == 2) {
         return 'Renovación';
+    }elseif ($razon_id == '3' || $razon_id == 3) {
+        return 'Aumento Cupo';
     }
 }
 

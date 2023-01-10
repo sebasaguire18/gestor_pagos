@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-11-2022 a las 04:56:15
+-- Tiempo de generación: 10-01-2023 a las 03:54:19
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 7.4.30
 
@@ -34,12 +34,13 @@ CREATE TABLE `balance` (
   `address` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `nit_user` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `phone_user` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `quantity` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `update_q` int(255) DEFAULT NULL,
-  `quantity_u` int(11) DEFAULT NULL,
+  `b_quantity` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `update_q` int(255) NOT NULL,
+  `quantity_u` int(11) NOT NULL,
   `interests` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `total_quantity` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `date_renov` datetime DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -47,9 +48,9 @@ CREATE TABLE `balance` (
 -- Volcado de datos para la tabla `balance`
 --
 
-INSERT INTO `balance` (`id_balance`, `id_newuser`, `name`, `address`, `nit_user`, `phone_user`, `quantity`, `update_q`, `quantity_u`, `interests`, `total_quantity`, `date`, `status`) VALUES
-('637aa6e422ceb', '6375b8d5d7852', 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '1005087224', '3136641987', '200000', 0, 0, '40000', '180000', '2022-11-20 17:15:00', 1),
-('637af6149efed', '637af30aa9019', 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '1095178897', '3127650248', '150000', NULL, NULL, '30000', '180000', '2022-11-20 22:52:52', 1);
+INSERT INTO `balance` (`id_balance`, `id_newuser`, `name`, `address`, `nit_user`, `phone_user`, `b_quantity`, `update_q`, `quantity_u`, `interests`, `total_quantity`, `date`, `date_renov`, `status`) VALUES
+('637aa6e422ceb', '6375b8d5d7852', 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '1005087224', '3136641987', '400000', 0, 0, '80000', '350000', '2022-11-20 17:15:00', '2023-01-03 23:01:21', 1),
+('637af6149efed', '637af30aa9019', 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '1095178897', '3127650248', '150000', 0, 0, '30000', '104000', '2022-11-20 22:52:52', '2022-12-27 19:06:45', 1);
 
 -- --------------------------------------------------------
 
@@ -107,6 +108,13 @@ CREATE TABLE `extendloan` (
   `date` datetime NOT NULL DEFAULT current_timestamp(),
   `status` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `extendloan`
+--
+
+INSERT INTO `extendloan` (`id_extendLoan`, `id_newuser`, `name`, `nit_user`, `address`, `phone_user`, `quantityP`, `quantityLoan`, `why_refuse`, `id_userRegis`, `date`, `status`) VALUES
+('63b4db3b951d8', '6375b8d5d7852', 'Yuliana Ocampo Martinez', 1005087224, 'Vista Hermosa Mz B # 1', '3136641987', '70000', '400000', '', 2, '2023-01-03 20:49:47', 1);
 
 -- --------------------------------------------------------
 
@@ -178,6 +186,8 @@ CREATE TABLE `payment` (
   `quantity` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `phone_user` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `id_userRegis` int(11) NOT NULL DEFAULT 0,
+  `razon_abono` int(11) NOT NULL DEFAULT 1,
+  `forma_pago` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `date` datetime NOT NULL DEFAULT current_timestamp(),
   `status` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -186,8 +196,24 @@ CREATE TABLE `payment` (
 -- Volcado de datos para la tabla `payment`
 --
 
-INSERT INTO `payment` (`id_payment`, `id_newuser`, `nit_user`, `name`, `address`, `quantity`, `phone_user`, `id_userRegis`, `date`, `status`) VALUES
-('637abc6043a6c', '6375b8d5d7852', 1005087224, 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '60000', '3136641987', 1, '2022-11-20 18:46:40', 1);
+INSERT INTO `payment` (`id_payment`, `id_newuser`, `nit_user`, `name`, `address`, `quantity`, `phone_user`, `id_userRegis`, `razon_abono`, `forma_pago`, `date`, `status`) VALUES
+('637abc6043a6c', '6375b8d5d7852', 1005087224, 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '60000', '3136641987', 1, 1, 'Efectivo', '2022-11-20 18:46:40', 1),
+('637b09991389b', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '60000', '3127650248', 1, 1, 'Efectivo', '2022-11-21 00:16:09', 1),
+('6383f87397ef2', '6375b8d5d7852', 1005087224, 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '30000', '3136641987', 1, 1, 'Efectivo', '2022-11-27 18:53:23', 1),
+('6386e23f9c5a5', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '60000', '3127650248', 2, 1, 'Efectivo', '2022-11-29 23:55:27', 1),
+('6386e2524a8ab', '6375b8d5d7852', 1005087224, 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '30000', '3136641987', 2, 1, 'Efectivo', '2022-11-29 23:55:46', 1),
+('638a7f502655f', '6375b8d5d7852', 1005087224, 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '20000', '3136641987', 1, 1, 'Efectivo', '2022-12-02 17:42:24', 1),
+('638a955baa557', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '30000', '3127650248', 1, 1, 'Efectivo', '2022-12-02 19:16:27', 1),
+('638ac22995184', '6375b8d5d7852', 1005087224, 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '30000', '3136641987', 1, 1, 'Transferencia', '2022-12-02 22:27:37', 1),
+('63963c3f54342', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '30000', '3127650248', 2, 2, 'Efectivo', '2022-12-11 15:23:27', 1),
+('639f7f87e44f1', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '50000', '3127650248', 2, 1, 'Efectivo', '2022-12-18 16:00:55', 1),
+('63ab81ba1275f', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '25000', '3127650248', 2, 1, 'Transferencia', '2022-12-27 18:37:30', 1),
+('63ab88958380b', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '105000', '3127650248', 2, 2, 'Efectivo', '2022-12-27 19:06:45', 1),
+('63b4fa1166650', '6375b8d5d7852', 1005087224, 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '70000', '3136641987', 1, 3, 'Efectivo', '2023-01-03 23:01:21', 1),
+('63b502f9f07f6', '6375b8d5d7852', 1005087224, 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '50000', '3136641987', 2, 1, 'Efectivo', '2023-01-03 23:39:21', 1),
+('63b5037b8440a', '6375b8d5d7852', 1005087224, 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '80000', '3136641987', 2, 1, 'Efectivo', '2023-01-03 23:41:31', 1),
+('63b5039354905', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '38000', '3127650248', 2, 1, 'Efectivo', '2023-01-03 23:41:55', 1),
+('63b50a450c4f6', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '38000', '3127650248', 2, 1, 'Transferencia', '2023-01-04 00:10:29', 1);
 
 -- --------------------------------------------------------
 

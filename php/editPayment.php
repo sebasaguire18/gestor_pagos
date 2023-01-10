@@ -177,7 +177,7 @@
                                     $idPayment = uniqid();
                                     $quantityRes = $mostrarP['total_quantity'];
                                     $formaP = 'Efectivo';
-                                    $cupo = $mostrarP['quantity'];
+                                    $cupo = $mostrarP['b_quantity'];
                                     
                                     if ($quantityRes > $cupo) {
                                         echo '
@@ -193,7 +193,7 @@
 
                                         if ($insertPayment) {
                                     
-                                            $quantityResult = $mostrarP['quantity']+$mostrarP['interests'];
+                                            $quantityResult = $mostrarP['b_quantity']+$mostrarP['interests'];
                                             $editarPay = mysqli_query($conexion,"UPDATE balance SET total_quantity='$quantityResult', date_renov = NOW() WHERE id_newuser='$id_newuser'");
 
                                             if ($editarPay) {

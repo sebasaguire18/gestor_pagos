@@ -4,6 +4,7 @@
   include '../function/select_usuario.php';
   include '../function/select_usuario_ex.php';
   include '../function/select_notifications.php';
+  include '../function/funciones.php';
   include '../php/mostrarfecha.php';
 
   if($_SESSION['usuario']){
@@ -67,17 +68,17 @@
   </header>
     <?php
         
-            if (isset($_GET['id_user']) && isset($_GET['id_newuser'])) {
-                $id_user=$_GET['id_user'];
+            if (isset($_GET['accion']) && isset($_GET['id_newuser'])) {
+                $accion=$_GET['accion'];
                 $id_newuser=$_GET['id_newuser'];
 
                     // consultar usuario para verificar si existe
-                $consulUser="SELECT * FROM balance WHERE id_user='$id_user' AND id_newuser='$id_newuser'";
+                $consulUser="SELECT * FROM balance WHERE id_newuser='$id_newuser'";
                 $ejecutConsulUser=mysqli_query($conexion,$consulUser);
                 $mostrar_U=mysqli_fetch_array($ejecutConsulUser);
 
-                $balanceNumber=$mostrar_U['quantity'] + $mostrar_U['interests'];
-                $deuda=number_format($balanceNumber,0,",",".");
+                $deuda=formatoAPrecio($mostrar_U['total_quantity']);
+                $cupo=formatoAPrecio($mostrar_U['b_quantity']);
             }
                 
     ?>  
@@ -90,28 +91,42 @@
                                 $quantityLoan=$_POST['cantidad'];
             
                                 if ($quantityLoan=="") {
-                                    echo '<p class="mes_false"><span class="icon-warning"> </span>¡Recuerda llenar el campo!<a href="javascript:history.go(-1)"> <br> Vale.</a></p>';
+                                    echo '
+                                        <div class="alert alert-warning text-center">
+                                            <p><span class="icon-warning"> </span>¡Recuerda llenar el campo!<a href="javascript:history.go(-1)"> <br> Volver.</a></p>
+                                        </div>
+                                        ';
                                 }else {
                                     // consultar los datos del usuario para guardarlos en la tabla extendloan
-										$consultaP="SELECT * FROM balance WHERE id_user='$id_user' AND id_newuser='$id_newuser'";
-										$ejecut_consultaP=mysqli_query($conexion,$consultaP) or die('error');
-                                        $mostrarP=mysqli_fetch_array($ejecut_consultaP);
+										$consultaP = mysqli_query($conexion,"SELECT * FROM balance WHERE id_newuser='$id_newuser'") or die('error');
+                                        $mostrarP = mysqli_fetch_array($consultaP);
                                         
                                         $name=$mostrarP['name'];
                                         $nit_user=$mostrarP['nit_user'];
                                         $address=$mostrarP['address'];
                                         $phone_user=$mostrarP['phone_user'];
-                                        $quantityP=$balanceNumber;
-                                        $id_userRegis=$mostrar_usu['id_user'];
+                                        $quantityP=$mostrarP['total_quantity'];
                                     
+                                        $id_userRegis=$mostrar_usu['id_user'];
+
+										$idExtendLoan = uniqid();
+
                                     // insertar datos y registrar la solicitud
-                                        $insertAmpliarP="INSERT INTO extendloan(id_user,id_newuser,name,nit_user,address,phone_user,quantityP,quantityLoan,id_userRegis) VALUES('$id_user','$id_newuser','$name','$nit_user','$address','$phone_user','$quantityP','$quantityLoan','$id_userRegis')";
+                                        $insertAmpliarP="INSERT INTO extendloan(id_extendLoan,id_newuser,name,nit_user,address,phone_user,quantityP,quantityLoan,id_userRegis) VALUES('$idExtendLoan','$id_newuser','$name','$nit_user','$address','$phone_user','$quantityP','$quantityLoan','$id_userRegis')";
                                         $ejecut_insertAmpliarP=mysqli_query($conexion,$insertAmpliarP);
 
                                         if ($ejecut_insertAmpliarP) {
-                                            echo '<p class="mes_true"><span class="icon-check"> </span>Solicitud Registrada exitosamente. <a href="../vistasnew/saldoPendiente.php"><br> Vale.</a></p>';
+                                            echo '
+                                                <div class="alert alert-success text-center">
+                                                    <p><span class="icon-check"> </span>Solicitud Registrada exitosamente.</p> <a href="../vistasnew/saldoPendiente.php"><br> Vale.</a>
+                                                </div>  
+                                                ';
                                         }else {
-                                            echo '<p class="mes_false"><span class="icon-warning"> </span>¡Algo Falló al registrar la solicitud!<a href="javascript:history.go(-1)"> <br> Vale.</a></p>';
+                                            echo '
+                                                <div class="alert alert-danger text-center">
+                                                    <p><span class="icon-warning"> </span>¡Algo Falló al registrar la solicitud!<a href="javascript:history.go(-1)"> <br> Volver.</a></p>
+                                                </div>
+                                                ';
                                         }
                                     
                                 }
@@ -127,13 +142,19 @@
 						<form action="#" method="POST">
                             <div class="row form-group text-center">
                                 <div class="col-md-12">
-                                    <p class="text-left lead">Deuda Actual:</p>
-                                    <input type="text" disabled class="form-control text-center" value="<?php echo '$ '. $deuda ; ?>">
+                                    <p class="text-left lead">Cupo Actual:</p>
+                                    <input type="text" disabled class="form-control text-center" value="<?php echo $cupo ; ?>">
                                 </div>
                             </div>
                             <div class="row form-group text-center">
                                 <div class="col-md-12">
-                                <p class="text-left lead">Deuda Actual:</p>
+                                    <p class="text-left lead">Deuda Actual:</p>
+                                    <input type="text" disabled class="form-control text-center" value="<?php echo $deuda ; ?>">
+                                </div>
+                            </div>
+                            <div class="row form-group text-center">
+                                <div class="col-md-12">
+                                <p class="text-left lead">Cupo deseado:</p>
                                     <input type="text" class="form-control text-center" name="cantidad" placeholder="Valor sin puntos ni comas">
                                 </div>
                             </div>

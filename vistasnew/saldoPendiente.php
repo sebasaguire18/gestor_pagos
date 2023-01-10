@@ -138,13 +138,13 @@
 											$objeto_DateTime=date_create($mostrarP['date']);
 											$date = date_format($objeto_DateTime, "j/M - h:i a");
 											
-											$pagoNumero=$mostrarP['quantity'];
+											$pagoNumero=$mostrarP['b_quantity'];
 											$pago=number_format($pagoNumero,0,",",".");
 											
 											$interestsNumero=$mostrarP['interests'];
 											$interests=number_format($interestsNumero,0,",",".");
 
-											$saldoTotalNumero=$mostrarP['quantity']+$mostrarP['interests'];
+											$saldoTotalNumero=$mostrarP['b_quantity']+$mostrarP['interests'];
 											$saldoTotal=number_format($saldoTotalNumero,0,",",".");
 									?>	
 										<table class="tableUserEdit">
