@@ -338,74 +338,73 @@
 								<?php
 												}else{
 													
-													// actualizar el estado de la solicitud
-													$updateStatusEL = "UPDATE extendloan SET status='$statusN' WHERE id_extendLoan='$id_extendLoan'";
-													$ejecut_updateStatusEL = mysqli_query($conexion,$updateStatusEL);
+													// para poder traer los datos del usuario
+													$consultarAP = mysqli_query($conexion,"SELECT * FROM balance WHERE id_newuser='$id_newuserE'");
+													$mostrar_CAP = mysqli_fetch_array($consultarAP);
+
+													$name=$mostrar_CAP['name'];
+													$address=$mostrar_CAP['address'];
+													$phone_user=$mostrar_CAP['phone_user'];
+													$nit_user=$mostrar_CAP['nit_user'];
+													$id_userRegis=$mostrar_usu['id_user'];
+													$idPayment = uniqid();
+													$quantityRes = $mostrar_CAP['total_quantity'];
+													$formaP = 'Efectivo';
+													$cupo = $mostrar_CAP['b_quantity'];
+													$cantidadActualizacion = $mostrar_CAP['quantity_u']+1;
+
 													
-													if ($ejecut_updateStatusEL) {
-														
-														// para poder traer los datos del usuario
-														$consultarAP = mysqli_query($conexion,"SELECT * FROM balance WHERE id_newuser='$id_newuserE'");
-														$mostrar_CAP = mysqli_fetch_array($consultarAP);
+													$cupoAP = $mostrar_UEL['quantityLoan'];
+													$interests_AP = $cupoAP*0.2;
 
-														$name=$mostrar_CAP['name'];
-														$address=$mostrar_CAP['address'];
-														$phone_user=$mostrar_CAP['phone_user'];
-														$nit_user=$mostrar_CAP['nit_user'];
-														$id_userRegis=$mostrar_usu['id_user'];
-														$idPayment = uniqid();
-														$quantityRes = $mostrar_CAP['total_quantity'];
-														$formaP = 'Efectivo';
-														$cupo = $mostrar_CAP['b_quantity'];
-														$cantidadActualizacion = $mostrar_CAP['quantity_u']+1;
+													$quantity_u = $cupoAP+$interests_AP;
 
-														
-														$cupoAP = $mostrar_UEL['quantityLoan'];
-														$interests_AP = $cupoAP*0.2;
+													$razon_solicitud = $mostrar_UEL['razon_solicitud'];													
 
-														$quantity_u = $cupoAP+$interests_AP;
-														
-														if ($quantityRes > $cupoAP) {
-															echo '
-																<div class="alert alert-danger text-center">
-																	<p><span class="icon-warning"> </span>El monto que debe es mayor al nuevo cupo solicitado. </p> <a href="javascript:history.go(-1)"> <br> Vale.</a>
-																</div>    
-																';
-														}else {
+													if ($quantityRes > $cupoAP) {
+														echo '
+															<div class="alert alert-danger text-center">
+																<p><span class="icon-warning"> </span>El monto que debe es mayor al nuevo cupo solicitado. </p> <a href="javascript:history.go(-1)"> <br> Vale.</a>
+															</div>    
+															';
+													}else {
 
-															// Restarle a la deuda y setear todo de nuevo //
-															// insertar datos y registrar el pago
-															$insertPayment = mysqli_query($conexion,"INSERT INTO payment(id_payment,id_newuser,nit_user,name,address,quantity,phone_user,id_userRegis,razon_abono,forma_pago) VALUES('$idPayment','$id_newuserE','$nit_user','$name','$address','$quantityRes','$phone_user','$id_userRegis',3,'$formaP')");
+														// Restarle a la deuda y setear todo de nuevo //
+														// insertar datos y registrar el pago
+														$insertPayment = mysqli_query($conexion,"INSERT INTO payment(id_payment,id_newuser,nit_user,name,address,quantity,phone_user,id_userRegis,razon_abono,forma_pago) VALUES('$idPayment','$id_newuserE','$nit_user','$name','$address','$quantityRes','$phone_user','$id_userRegis',$razon_solicitud,'$formaP')");
 
-															if ($insertPayment) {
+														if ($insertPayment) {
 
-																// actualizar el nuevo prestamo (Ampliar Nuevo Prestamo) en la tabla balance
-																$updateStatusANP = "UPDATE balance SET b_quantity='$cupoAP', interests='$interests_AP', total_quantity='$quantity_u', update_q = '$cupo', quantity_u = '$cantidadActualizacion', date_renov = NOW() WHERE id_newuser='$id_newuserE'";
-																$ejecut_updateStatusANP = mysqli_query($conexion,$updateStatusANP);
+															// actualizar el nuevo prestamo (Ampliar Nuevo Prestamo) en la tabla balance
+															$updateStatusANP = "UPDATE balance SET b_quantity='$cupoAP', interests='$interests_AP', total_quantity='$quantity_u', update_q = '$cupo', quantity_u = '$cantidadActualizacion', date_renov = NOW() WHERE id_newuser='$id_newuserE'";
+															$ejecut_updateStatusANP = mysqli_query($conexion,$updateStatusANP);
 
 
-																if ($ejecut_updateStatusANP) {					
-											?>
-																	<div class="alert alert-success text-center mgt-6">
-																		<p><span class="icon-check"> </span>Prestamo Aceptado exitosamente, datos actualizados.</p>
-																		<br>
-																		<a class="volver" href="../vistasnew/ampliarPrestamo.php">OK</a>
-																	</div>
-											<?php					
-																}else{
-											?>
-																	<div class="alert alert-danger">
-																		<p><span class="icon-cross"> </span>Error al Actualizar el Prestamo. error002.</p><a class="volver" href="javascript:history.go(-2);">Volver</a>
-																	</div>
-											<?php		
-																}
-														
+															if ($ejecut_updateStatusANP) {	
+																
+																// actualizar el estado de la solicitud
+																$updateStatusEL = mysqli_query($conexion,"UPDATE extendloan SET status='$statusN' WHERE id_extendLoan='$id_extendLoan'");
+
+																?>
+																<div class="alert alert-success text-center mgt-6">
+																	<p><span class="icon-check"> </span>Prestamo Aceptado exitosamente, datos actualizados.</p>
+																	<br>
+																	<a class="volver" href="../vistasnew/ampliarPrestamo.php">OK</a>
+																</div>
+																<?php					
+															}else{
+																?>
+																<div class="alert alert-danger">
+																	<p><span class="icon-cross"> </span>Error al Actualizar el Prestamo. error002.</p><a class="volver" href="javascript:history.go(-2);">Volver</a>
+																</div>
+																<?php		
 															}
+													
 														}
 													}
 												}
 											}elseif (isset($_POST['btnRAP'])) {
-												//------------------------- si el administrador rechaza la solicitud.
+												//------------------------- si el administrador rechaza la solicitud de ampliar prestamo.
 												$id_extendLoan=$_POST['id_extendLoan'];
 												$why=$_POST['why'];
 												$statusWhy=2;
@@ -486,8 +485,8 @@
 												<td><?php echo formatoAPrecio($mostrarP['b_quantity']); ?></td>
 												<td><?php echo formatoAPrecio($mostrarP['total_quantity']); ?></td>
 												<td>
-													<a title="Ampliar Crédito" href="../php/solitAmpliarP.php?accion='ampliar'&id_newuser=<?php echo $mostrarP['id_newuser'];?>"><span style="font-size: 30px;" class="icon-arrow-up"></span></a>
-													<a title="Reducir Crédito" href="../php/solitAmpliarP.php?accion='reducir'&id_newuser=<?php echo $mostrarP['id_newuser'];?>"><span style="font-size: 30px;" class="icon-arrow-down"></span></a>
+													<a title="Ampliar Crédito" href="../php/solitAmpliarP.php?accion=101&id_newuser=<?php echo $mostrarP['id_newuser'];?>"><span style="font-size: 30px;" class="icon-arrow-up"></span></a>
+													<a title="Reducir Crédito" href="../php/solitAmpliarP.php?accion=102&id_newuser=<?php echo $mostrarP['id_newuser'];?>"><span style="font-size: 30px;" class="icon-arrow-down"></span></a>
 												</td>
 											</tr>
 									<?php

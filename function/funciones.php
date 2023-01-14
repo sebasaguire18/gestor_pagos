@@ -348,8 +348,10 @@ function consultarRazonAbono($razon_id){
         return 'Abono a deuda'; 
     }elseif ($razon_id == '2' || $razon_id == 2) {
         return 'Renovación';
-    }elseif ($razon_id == '3' || $razon_id == 3) {
+    }elseif ($razon_id == '101' || $razon_id == 101) {
         return 'Aumento Cupo';
+    }elseif ($razon_id == '102' || $razon_id == 102) {
+        return 'Reduccion Cupo';
     }
 }
 

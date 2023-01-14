@@ -59,7 +59,7 @@
 				  <div class="display-t">
 					  <div class="display-tc">
                       <h1 class="animate-box" data-animate-effect="fadeInUp">Ampliar prestamo</h1>
-						  <h2 class="animate-box" data-animate-effect="fadeInUp">Aquí puedes <?php if($mostrar_usu['id_roll']==3){ echo "<em>Solicitar Ampliar tú prestamo.</em>"; }else{echo "<em>Solicitar Ampliar prestamo de cada usuario.</em>"; } ?></h2>
+						  <h2 class="animate-box" data-animate-effect="fadeInUp">Aquí puedes <em>Solicitar Ampliar prestamo de cada usuario.</em></h2>
 					  </div>
 				  </div>
 			  </div>
@@ -112,7 +112,7 @@
 										$idExtendLoan = uniqid();
 
                                     // insertar datos y registrar la solicitud
-                                        $insertAmpliarP="INSERT INTO extendloan(id_extendLoan,id_newuser,name,nit_user,address,phone_user,quantityP,quantityLoan,id_userRegis) VALUES('$idExtendLoan','$id_newuser','$name','$nit_user','$address','$phone_user','$quantityP','$quantityLoan','$id_userRegis')";
+                                        $insertAmpliarP="INSERT INTO extendloan(id_extendLoan,id_newuser,name,nit_user,address,phone_user,quantityP,quantityLoan,razon_solicitud,id_userRegis) VALUES('$idExtendLoan','$id_newuser','$name','$nit_user','$address','$phone_user','$quantityP','$quantityLoan',$accion,'$id_userRegis')";
                                         $ejecut_insertAmpliarP=mysqli_query($conexion,$insertAmpliarP);
 
                                         if ($ejecut_insertAmpliarP) {
