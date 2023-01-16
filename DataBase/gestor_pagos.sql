@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-01-2023 a las 03:54:19
+-- Tiempo de generación: 16-01-2023 a las 21:42:40
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 7.4.30
 
@@ -50,7 +50,7 @@ CREATE TABLE `balance` (
 
 INSERT INTO `balance` (`id_balance`, `id_newuser`, `name`, `address`, `nit_user`, `phone_user`, `b_quantity`, `update_q`, `quantity_u`, `interests`, `total_quantity`, `date`, `date_renov`, `status`) VALUES
 ('637aa6e422ceb', '6375b8d5d7852', 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '1005087224', '3136641987', '400000', 0, 0, '80000', '350000', '2022-11-20 17:15:00', '2023-01-03 23:01:21', 1),
-('637af6149efed', '637af30aa9019', 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '1095178897', '3127650248', '150000', 0, 0, '30000', '104000', '2022-11-20 22:52:52', '2022-12-27 19:06:45', 1);
+('637af6149efed', '637af30aa9019', 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '1095178897', '3127650248', '100000', 150000, 1, '20000', '120000', '2022-11-20 22:52:52', '2023-01-14 00:27:22', 1);
 
 -- --------------------------------------------------------
 
@@ -104,6 +104,7 @@ CREATE TABLE `extendloan` (
   `quantityP` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `quantityLoan` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `why_refuse` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `razon_solicitud` int(11) NOT NULL COMMENT '101:ampliar; 102:reducir; 103:recuperar crédito;',
   `id_userRegis` int(11) NOT NULL,
   `date` datetime NOT NULL DEFAULT current_timestamp(),
   `status` int(11) NOT NULL DEFAULT 0
@@ -113,8 +114,10 @@ CREATE TABLE `extendloan` (
 -- Volcado de datos para la tabla `extendloan`
 --
 
-INSERT INTO `extendloan` (`id_extendLoan`, `id_newuser`, `name`, `nit_user`, `address`, `phone_user`, `quantityP`, `quantityLoan`, `why_refuse`, `id_userRegis`, `date`, `status`) VALUES
-('63b4db3b951d8', '6375b8d5d7852', 'Yuliana Ocampo Martinez', 1005087224, 'Vista Hermosa Mz B # 1', '3136641987', '70000', '400000', '', 2, '2023-01-03 20:49:47', 1);
+INSERT INTO `extendloan` (`id_extendLoan`, `id_newuser`, `name`, `nit_user`, `address`, `phone_user`, `quantityP`, `quantityLoan`, `why_refuse`, `razon_solicitud`, `id_userRegis`, `date`, `status`) VALUES
+('63b4db3b951d8', '6375b8d5d7852', 'Yuliana Ocampo Martinez', 1005087224, 'Vista Hermosa Mz B # 1', '3136641987', '70000', '400000', '', 0, 2, '2023-01-03 20:49:47', 1),
+('63c232b0247ad', '637af30aa9019', 'Anderson Aguirre Vallejo', 1095178897, 'Vista Hermosa Mz B # 1', '3127650248', '104000', '200000', 'solicitud antigua', 0, 2, '2023-01-13 23:42:24', 2),
+('63c2387680240', '637af30aa9019', 'Anderson Aguirre Vallejo', 1095178897, 'Vista Hermosa Mz B # 1', '3127650248', '66000', '100000', '', 102, 2, '2023-01-14 00:07:02', 1);
 
 -- --------------------------------------------------------
 
@@ -209,11 +212,36 @@ INSERT INTO `payment` (`id_payment`, `id_newuser`, `nit_user`, `name`, `address`
 ('639f7f87e44f1', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '50000', '3127650248', 2, 1, 'Efectivo', '2022-12-18 16:00:55', 1),
 ('63ab81ba1275f', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '25000', '3127650248', 2, 1, 'Transferencia', '2022-12-27 18:37:30', 1),
 ('63ab88958380b', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '105000', '3127650248', 2, 2, 'Efectivo', '2022-12-27 19:06:45', 1),
-('63b4fa1166650', '6375b8d5d7852', 1005087224, 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '70000', '3136641987', 1, 3, 'Efectivo', '2023-01-03 23:01:21', 1),
+('63b4fa1166650', '6375b8d5d7852', 1005087224, 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '70000', '3136641987', 1, 101, 'Efectivo', '2023-01-03 23:01:21', 1),
 ('63b502f9f07f6', '6375b8d5d7852', 1005087224, 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '50000', '3136641987', 2, 1, 'Efectivo', '2023-01-03 23:39:21', 1),
 ('63b5037b8440a', '6375b8d5d7852', 1005087224, 'Yuliana Ocampo Martinez', 'Vista Hermosa Mz B # 1', '80000', '3136641987', 2, 1, 'Efectivo', '2023-01-03 23:41:31', 1),
 ('63b5039354905', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '38000', '3127650248', 2, 1, 'Efectivo', '2023-01-03 23:41:55', 1),
-('63b50a450c4f6', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '38000', '3127650248', 2, 1, 'Transferencia', '2023-01-04 00:10:29', 1);
+('63b50a450c4f6', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '38000', '3127650248', 2, 1, 'Transferencia', '2023-01-04 00:10:29', 1),
+('63c2385608da5', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '38000', '3127650248', 2, 1, 'Efectivo', '2023-01-14 00:06:30', 1),
+('63c23d3aac6c8', '637af30aa9019', 1095178897, 'Anderson Aguirre Vallejo', 'Vista Hermosa Mz B # 1', '66000', '3127650248', 1, 102, 'Efectivo', '2023-01-14 00:27:22', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `paytype`
+--
+
+CREATE TABLE `paytype` (
+  `paytype_id` varchar(255) COLLATE utf8_spanish2_ci NOT NULL,
+  `paytype_name` varchar(255) COLLATE utf8_spanish2_ci NOT NULL,
+  `paytype_fecha` datetime NOT NULL DEFAULT current_timestamp(),
+  `paytype_status` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `paytype`
+--
+
+INSERT INTO `paytype` (`paytype_id`, `paytype_name`, `paytype_fecha`, `paytype_status`) VALUES
+('63c5a4e9c882f', 'Diario', '2023-01-16 14:26:33', 1),
+('63c5a4faeaba9', 'Semanal', '2023-01-16 14:26:50', 1),
+('63c5a5033088d', 'Quincenal', '2023-01-16 14:26:59', 1),
+('63c5a50c2bbb7', 'Mensual', '2023-01-16 14:27:08', 1);
 
 -- --------------------------------------------------------
 

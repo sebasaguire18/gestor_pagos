@@ -97,7 +97,8 @@
 										<td class="titleEdit">Identificación</td>
 										<td class="titleEdit">Nombre</td>
 										<td class="titleEdit">Dirección</td>
-										<td class="titleEdit">Resta</td>
+										<td class="titleEdit">Saldo</td>
+										<td class="titleEdit">Tipo de pago</td>
 										<td class="titleEdit">Abonar</td>
 									</tr>
 								</thead>
