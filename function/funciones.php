@@ -378,7 +378,7 @@ function consultarNombreCiudad($city_id){
 
 }
 
-function consultarNombreTipoPAgo($paytype_id){
+function consultarNombreTipoPago($paytype_id){
     include '../php/conexion-bd.php';
 
     $consultaNTP = mysqli_query($conexion,"SELECT * FROM paytype WHERE paytype_id = '$paytype_id'");

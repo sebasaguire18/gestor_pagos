@@ -98,27 +98,27 @@
 							<?php
 								}else{	
 
-									$validarCiudad="SELECT * FROM citys WHERE city_name='$nameTipoPago'";
-									$ejecut_validarC=mysqli_query($conexion,$validarCiudad);
+									$validarTipoPago="SELECT * FROM paytype WHERE paytype_name='$nameTipoPago'";
+									$ejecut_validarC=mysqli_query($conexion,$validarTipoPago);
 									$row=mysqli_num_rows($ejecut_validarC);
 
-									$idCityNew = uniqid();
+									$idPayTypeNew = uniqid();
 
 									if ($row==1) {
 							?>
-										<p class="mes_false"><span class="icon-remove-user"> </span>Ciudad existente.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
+										<p class="mes_false"><span class="icon-remove-user"> </span>Tipo de pago existente.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
 							<?php
 									}else{
-										$insertCiudad="INSERT INTO citys(city_id,city_name) VALUES('$idCityNew','$nameTipoPago')";
-										$ejecut_insertCiudad=mysqli_query($conexion,$insertCiudad);
+										$insertTipoPago="INSERT INTO paytype(paytype_id,paytype_name) VALUES('$idPayTypeNew','$nameTipoPago')";
+										$ejecut_insertTipoPago=mysqli_query($conexion,$insertTipoPago);
 										
-										if ($ejecut_insertCiudad) {
+										if ($ejecut_insertTipoPago) {
 							?>
-										<p class="mes_true"><span class="icon-check"> </span>Ciudad Creada exitosamente.</p>
+										<p class="mes_true"><span class="icon-check"> </span>Tipo de pago Creado exitosamente.</p>
 							<?php		
 										}else{
 							?>
-										<p class="mes_false"><span class="icon-warning"> </span>Error al crear la Ciudad.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
+										<p class="mes_false"><span class="icon-warning"> </span>Error al crear el Tipo de pago.</p><a class="volver" href="javascript:history.go(-1);">Volver</a>
 							<?php		
 										}
 									}

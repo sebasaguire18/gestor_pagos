@@ -115,7 +115,10 @@
 						</div>
 						<div class="row form-group">
 							<div class="col-md-12">
-								<input type="text" id="tipo_cred" name="tipo_cred" class="form-control" placeholder="Tipo de Crédito">
+								<select class="form-control" name="tipo_cred" id="tipo_cred">
+									<option value="0">Seleccionar Tipo Pago...</option>
+									<?php consultarTipoPagosSelect(1); ?>
+								</select>
 							</div>
 						</div>
 						<div class="row form-group">

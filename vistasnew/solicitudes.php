@@ -151,7 +151,7 @@
 								<div class="row form-group">
 									<div class="col-md-12">
 										<label for="nit_user">Tipo de crédito:</label>
-										<input type="text" disabled class="form-control" value="<?php echo $mostrar_UN['tipo_credito']; ?>">
+										<input type="text" disabled class="form-control" value="<?php echo consultarNombreTipoPago($mostrar_UN['tipo_credito']); ?>">
 									</div>
 								</div>
 								<div class="row form-group">
