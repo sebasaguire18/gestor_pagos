@@ -46,7 +46,7 @@
 				<!-----------------------------------------  Inicio de sesión overlay login ----------------------------------------->
 					<div class="overlay active" id="overlay">
 						<div class="popup active" id="popup">
-							<h3>Venga es una prueba</h3>
+							<h3>Iniciar Sesión</h3>
 							<form action="php/iniciarsesion.php" method="POST">
 								<div class="contenedor-inputs">
 									<input type="email" name="email" placeholder="Email">
