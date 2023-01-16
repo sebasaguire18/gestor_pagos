@@ -359,6 +359,7 @@ function consultarSaldosPendLista($status,$usu_id=false){
                             <td><?php echo $mostrarSaldo['name']. " &#8212 <a href='tel:". $mostrarSaldo['phone_user']. "'>" . $mostrarSaldo['phone_user']; ?></a></td>
                             <td><?php echo consultarNombreCiudad($mostrarSaldo['city']); ?></td>
                             <td><?php echo formatoAPrecio($mostrarSaldo['total_quantity']); ?></td>
+                            <td><?php echo consultarNombreTipoPago($mostrarSaldo['tipo_credito']); ?></td>
                             <?php if($mostrar_usu['id_roll']==1 || $mostrar_usu['id_roll']==2){ ?>
                                     <td><a title="Realizar Abono" href="../php/editPayment.php?id_newuser=<?php echo $mostrarSaldo['id_newuser'];?>"><span class="ti-receipt"></span></a></td>
                             <?php } ?>
