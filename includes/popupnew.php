@@ -19,6 +19,7 @@
 								<!-- <a class="btn-popup-enla" href="reportes.php?id_user=<?php  $id_user;?>"><button>Reportes</button></a> -->
 								<a class="btn-popup-enla" href="../vistasnew/ampliarPrestamo.php"><button>Solicitudes Ampliar Prestamo <?php if($solicitudesAP>0){ ?><span class="label label-warning"><?php echo $solicitudesAP;?></span><?php } ?></button></a>
 								<a class="btn-popup-enla" href="../vistasnew/ciudades.php"><button>Cuidades</button></a>
+								<a class="btn-popup-enla" href="../vistasnew/tiposPago.php"><button>Tipos de Pago</button></a>
 						<?php	
 							}else if($roll==2) {
 						?>

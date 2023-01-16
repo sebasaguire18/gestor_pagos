@@ -88,6 +88,14 @@
                 },
                 responsive: "true",
             });
+
+			// cargar tabla de ciudades
+            $('#tbTipoPagos').DataTable({
+                "language": {
+                    "url": "../datatables/Spanish.json"
+                },
+                responsive: "true",
+            });
 		});
 	</script>
 	<!-- data tables -->

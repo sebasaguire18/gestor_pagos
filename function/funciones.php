@@ -193,6 +193,55 @@ function consultarCiudadesSelect($status){
     }
 }
 
+function consultarTipoPagosLista($status){
+    include '../php/conexion-bd.php';
+        if($_SESSION['usuario']){
+            $nombre=$_SESSION['usuario'];
+
+        if ($status == 3) {
+            $ejecut_consultaUE2=mysqli_query($conexion,"SELECT * FROM paytype ORDER BY paytype_id ASC");
+        }else {
+            $ejecut_consultaUE2= mysqli_query($conexion,"SELECT * FROM paytype WHERE paytype_status = $status ORDER BY paytype_id DESC");
+        }
+        
+        while ($mostrarCiudades = mysqli_fetch_array($ejecut_consultaUE2)) {
+            
+           if ($mostrarCiudades['paytype_status'] == 1) {
+                $status='<td class="tdactive"><i class="ti-check"></i></td>';
+            }elseif ($mostrarCiudades['paytype_status'] == 0)  {
+                $status='<td class="tdinactive"><i class="ti-close"></i></td>';
+            }
+        ?>
+                    <tr>
+                        <td><?php echo $mostrarCiudades['paytype_id']; ?></td>
+                        <td><?php echo $mostrarCiudades['paytype_name']; ?></td>
+                        <?php echo $status;?>
+                        <td class="text-center"><a title="Editar" href="../php/editUser.php?paytype_id=<?php echo $mostrarCiudades['paytype_id'];?>"><i class="ti-file"></i></a></td>
+                    </tr>
+        <?php
+        }
+    }   
+}
+
+function consultarTipoPagosSelect($status){
+    include '../php/conexion-bd.php';
+    if ($status == 3) {
+        // consultar las ciudades disponibles para prestar
+        $consultaTipoPago="SELECT * FROM paytype";
+        $ejecut_consultaTipoPago=mysqli_query($conexion,$consultaTipoPago);
+    }else {
+        // consultar las ciudades disponibles para prestar
+        $consultaTipoPago="SELECT * FROM paytype WHERE paytype_status = $status ORDER BY paytype_name";
+        $ejecut_consultaTipoPago=mysqli_query($conexion,$consultaTipoPago);
+    }
+
+    while($mostrar_TipoPago=mysqli_fetch_Array($ejecut_consultaTipoPago)){
+    ?>
+        <option value="<?php echo $mostrar_TipoPago['paytype_id'] ?>"><?php echo $mostrar_TipoPago['paytype_name'] ?></option>
+    <?php		
+    }
+}
+
 function consultarPagosLista($status,$usu_id=false){
     include '../php/conexion-bd.php';
     
@@ -280,7 +329,7 @@ function consultarSaldosPendLista($status,$usu_id=false){
             ?>
                         <tr>
                             <td><?php echo $mostrarSaldo['nit_user']; ?></td>
-                            <td><?php echo $mostrarSaldo['name']. " &#8212 " . $mostrarSaldo['phone_user']; ?></td>
+                            <td><?php echo $mostrarSaldo['name']. " &#8212 <a href='tel:". $mostrarSaldo['phone_user']. "'>" . $mostrarSaldo['phone_user']; ?></a></td>
                             <td><?php echo consultarNombreCiudad($mostrarSaldo['city']); ?></td>
                             <td><?php echo formatoAPrecio($mostrarSaldo['total_quantity']); ?></td>
                             <?php if($mostrar_usu['id_roll']==1 || $mostrar_usu['id_roll']==2){ ?>
@@ -306,7 +355,7 @@ function consultarSaldosPendLista($status,$usu_id=false){
             ?>
                         <tr>
                             <td><?php echo $mostrarSaldo['nit_user']; ?></td>
-                            <td><?php echo $mostrarSaldo['name']. " &#8212 " . $mostrarSaldo['phone_user']; ?></td>
+                            <td><?php echo $mostrarSaldo['name']. " &#8212 <a href='tel:". $mostrarSaldo['phone_user']. "'>" . $mostrarSaldo['phone_user']; ?></a></td>
                             <td><?php echo consultarNombreCiudad($mostrarSaldo['city']); ?></td>
                             <td><?php echo formatoAPrecio($mostrarSaldo['total_quantity']); ?></td>
                             <?php if($mostrar_usu['id_roll']==1 || $mostrar_usu['id_roll']==2){ ?>
@@ -326,6 +375,17 @@ function consultarNombreCiudad($city_id){
     $mostrar_nameCity = mysqli_fetch_Array($consultaNC);
 
     echo $mostrar_nameCity['city_name'];
+
+}
+
+function consultarNombreTipoPAgo($paytype_id){
+    include '../php/conexion-bd.php';
+
+    $consultaNTP = mysqli_query($conexion,"SELECT * FROM paytype WHERE paytype_id = '$paytype_id'");
+
+    $mostrar_nameTP = mysqli_fetch_Array($consultaNTP);
+
+    echo $mostrar_nameTP['paytype_name'];
 
 }
 

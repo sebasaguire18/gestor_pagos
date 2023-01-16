@@ -150,7 +150,7 @@
 										<table class="tableUserEdit">
 											<tr>
 												<td class="titleEdit">Nombre</td>
-												<td><?php echo $mostrarP['name']. " &#8212 " . $mostrarP['phone_user']; ?>
+												<td><?php echo $mostrarP['name']. " &#8212 <a href='tel:'". $mostrarP['phone_user'].">" . $mostrarP['phone_user']; ?></a></td>
 											</td>
 											<tr>
 												<td class="titleEdit">Dirección</td>
@@ -196,7 +196,7 @@
 												$date = date_format($objeto_DateTime, "j/M - h:i a");	
 											?>
 											<tr>
-												<td"><?php echo $mostrarP['name']. " &#8212 " . $mostrarP['phone_user']; ?></td>
+												<td"><?php echo $mostrarP['name']. " &#8212 <a href='tel:'". $mostrarP['phone_user'].">" . $mostrarP['phone_user']; ?></a></td>
 												<td"><?php echo $mostrarP['address']; ?></td>
 												<td"><?php echo "$ ".$mostrarP['quantity']; ?></td>
 												<td"><?php echo $date; ?></td>
