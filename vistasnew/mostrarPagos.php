@@ -8,12 +8,6 @@
 
   if($_SESSION['usuario']){
 		$nombre=$_SESSION['usuario'];
-		if (!$_GET) {
-			header('location:mostrarPagos.php?pagina=1');
-		}
-		if ($_GET['pagina']<1) {
-			header('location:mostrarPagos.php?pagina=1');
-		}
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -92,12 +86,12 @@
 					<div class="gtco-section">
 							<div class="row form-group text-center">
 								<div class="col-md-12">
-									<h4 class="col-md-12 ">Fecha: <?php echo dateToday(); ?>.</h4>
+									<h4 class="col-md-12 ">Hoy es: <?php echo dateToday(); ?>.</h4>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-12">
-									<h3 class="tittle_form1 col-md-12 ">Pagos.</h3>
+									<h3 class="tittle_form1 col-md-12 ">Pagos</h3>
 								</div>
 								<div class="col-md-12">
 									<div class="part">
@@ -106,10 +100,10 @@
 												<thead class="thead-dark text-center">
 													<tr>
 														<th class="hidenP">ID Pago</th>
-														<th scope="col">Pagó</th>
+														<th scope="col">Nombre</th>
 														<th scope="col">Dirección</th>
+														<th scope="col">Pagó</th>
 														<th scope="col">Razón Pago</th>
-														<th scope="col">Forma Pago</th>
 														<th scope="col">Fecha</th>
 														<?php if($mostrar_usu['id_roll']==1){ ?>
 														<th scope="col"></th>

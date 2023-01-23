@@ -147,7 +147,7 @@
                                         </tr>
                                         <tr>
                                             <th class="bg-white text-black">Tipo crédito</th>
-                                            <th><?php echo $mostrarDHU['tipo_credito']; ?></th>
+                                            <th><?php echo consultarNombreTipoPago($mostrarDHU['tipo_credito']); ?></th>
 
                                         </tr>
                                         <tr>

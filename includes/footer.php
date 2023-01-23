@@ -1,6 +1,7 @@
+<hr>
 <footer id="gtco-footer" role="contentinfo">
 		<div class="gtco-container">
-			<div class="row row-p	b-md">
+			<!-- <div class="row row-p	b-md">
 
 				<div class="col-md-4">
 					<div class="gtco-widget">
@@ -33,22 +34,22 @@
 					</div>
 				</div>
 
-			</div>
+			</div> -->
 
 			<div class="row copyright">
 				<div class="col-md-12">
 					<p class="pull-left">
-						<small class="block">&copy; 2016 Free HTML5. All Rights Reserved.</small> 
-						<small class="block">Designed by <a href="http://gettemplates.co/" target="_blank">GetTemplates.co</a> Demo Images: <a href="http://unsplash.co/" target="_blank">Unsplash</a></small>
+						<small class="block">&copy; 2023 Todos los derechos reservados</small> 
+						<!-- <small class="block">Diseñado por <a href="https://bltiendas.com/" target="_blank">BLTiendas.com</a> y <a href="http://sebastian.bltiendas.com/" target="_blank">Sebastián Aguirre</a></small> -->
 					</p>
-					<p class="pull-right">
+					<!-- <p class="pull-right">
 						<ul class="gtco-social-icons pull-right">
 							<li><a href="#"><i class="icon-twitter"></i></a></li>
 							<li><a href="#"><i class="icon-facebook"></i></a></li>
 							<li><a href="#"><i class="icon-linkedin"></i></a></li>
 							<li><a href="#"><i class="icon-dribbble"></i></a></li>
 						</ul>
-					</p>
+					</p> -->
 				</div>
 			</div>
 

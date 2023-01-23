@@ -15,7 +15,7 @@
 				</div>
 				<div class="col-xs-8 text-right menu-1">
 					<ul>
-						<li><a href="../vistasnew/index.php">Home</a></li>
+						<li><a href="../vistasnew/index.php">Inicio</a></li>
 						<li><a href="../vistasnew/saldoPendiente.php">Saldo Pendiente</a>
 						<li><a href="../vistasnew/mostrarPagos.php">Pagos</a>
 						<li><a href="../vistasnew/usuarios.php">Usuarios</a></li>

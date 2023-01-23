@@ -360,6 +360,7 @@ function consultarSaldosPendLista($status,$usu_id=false){
                             <td><?php echo consultarNombreCiudad($mostrarSaldo['city']); ?></td>
                             <td><?php echo formatoAPrecio($mostrarSaldo['total_quantity']); ?></td>
                             <td><?php echo consultarNombreTipoPago($mostrarSaldo['tipo_credito']); ?></td>
+                            <td><?php echo consultarUltimoMov($mostrarSaldo['id_newuser']); ?></td>
                             <?php if($mostrar_usu['id_roll']==1 || $mostrar_usu['id_roll']==2){ ?>
                                     <td><a title="Realizar Abono" href="../php/editPayment.php?id_newuser=<?php echo $mostrarSaldo['id_newuser'];?>"><span class="ti-receipt"></span></a></td>
                             <?php } ?>
@@ -415,6 +416,47 @@ function consultarRazonAbono($razon_id){
     }elseif ($razon_id == '102' || $razon_id == 102) {
         return 'Reduccion Cupo';
     }
+}
+
+function consultarUltimoMov($id_newuser){
+    include '../php/conexion-bd.php';
+
+    $consultaUltimoMov = mysqli_query($conexion,"SELECT * FROM payment WHERE razon_abono <> 1 AND id_newuser = '$id_newuser' ORDER BY id_payment DESC LIMIT 1");
+    
+    $mostrar_UltimoMov = mysqli_fetch_array($consultaUltimoMov);
+
+    $razon_id = $mostrar_UltimoMov['razon_abono'];
+    $fecha_mov = formatoAFEcha($mostrar_UltimoMov['date']);
+
+    if ($razon_id == '1' || $razon_id == 1) {
+        return 'Abono a deuda el '. $fecha_mov; 
+    }elseif ($razon_id == '2' || $razon_id == 2) {
+        return 'Renovación el '. $fecha_mov;
+    }elseif ($razon_id == '101' || $razon_id == 101) {
+        return 'Aumento Cupo el '. $fecha_mov;
+    }elseif ($razon_id == '102' || $razon_id == 102) {
+        return 'Reduccion Cupo el '. $fecha_mov;
+    }
+}
+
+function conteoClientes($status_user){
+    include '../php/conexion-bd.php';
+
+    $consultaClientes = mysqli_query($conexion,"SELECT * FROM new_user WHERE status = $status_user");
+    
+    $conteoClientes = mysqli_num_rows($consultaClientes);
+
+    return $conteoClientes;
+}
+
+function conteoPagos($status_pay){
+    include '../php/conexion-bd.php';
+
+    $consultaPagos = mysqli_query($conexion,"SELECT * FROM payment WHERE status = $status_pay");
+    
+    $conteoPagos = mysqli_num_rows($consultaPagos);
+
+    return $conteoPagos;
 }
 
 // dar formato a un precio

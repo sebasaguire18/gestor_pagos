@@ -89,7 +89,7 @@
 								<h4 class="col-md-12 ">Fecha Última Actualización: <?php echo dateToday(); ?>.</h4>
 							</div>
 						</div>
-						<h3 class="tittle_form1 col-md-12 ">Usarios deudores.</h3>
+						<h3 class="tittle_form1 col-md-12 ">Clientes</h3>
 						<div class="table-responsive-xl"> 
 							<table class="table table-striped " id="tableSaldosPendientes">
 								<thead>
@@ -99,6 +99,7 @@
 										<td class="titleEdit">Dirección</td>
 										<td class="titleEdit">Saldo</td>
 										<td class="titleEdit">Tipo de pago</td>
+										<td class="titleEdit">Último Movimiento</td>
 										<td class="titleEdit">Abonar</td>
 									</tr>
 								</thead>

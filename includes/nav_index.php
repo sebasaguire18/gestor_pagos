@@ -4,7 +4,7 @@
 				</div>
 				<div class="col-xs-8 text-right menu-1">
 					<ul>
-						<li class="active"><a href="index.php">Home</a></li>
+						<li class="active"><a href="index.php">Inicio</a></li>
 						<!-- <li><a href="vistas/about.php">About</a></li>
 						<li class="has-dropdown">
 							<a href="vistas/services.php">Services <span class="icon-chevron-small-down"></span></a>
