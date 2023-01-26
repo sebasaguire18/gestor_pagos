@@ -15,7 +15,7 @@
   <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Ampliar Prestamo</title>
+  <title>Recuperar Cliente</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Free HTML5 Website Template by gettemplates.co" />
   <meta name="keywords" content="free website templates, free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive" />
@@ -58,8 +58,8 @@
 			  <div class="col-md-8 col-md-offset-2 text-center">
 				  <div class="display-t">
 					  <div class="display-tc">
-						  <h1 class="animate-box" data-animate-effect="fadeInUp">Ampliar prestamo</h1>
-						  <h2 class="animate-box" data-animate-effect="fadeInUp">Aquí puedes <?php if($mostrar_usu['id_roll']==3){ echo "<em>Solicitar Ampliar tú prestamo.</em>"; }else{echo "<em>Solicitar Ampliar prestamo de cada usuario.</em>"; } ?></h2>
+						  <h1 class="animate-box" data-animate-effect="fadeInUp">Recuperar cliente</h1>
+						  <h2 class="animate-box" data-animate-effect="fadeInUp">Aquí puedes <em>Solicitar Recuperar cliente en saldo cero.</em></h2>
 					  </div>
 				  </div>
 			  </div>
@@ -179,7 +179,7 @@
 							}
 						}else {
 					?>
-						<h3 class="tittle_form1"><?php echo $solicitudesAP;if ($solicitudesAP=1) {echo " Solicitud pendiente";}else {echo " Solicitudes pendientes";}?> por revisar.</h3>
+						<h3 class="tittle_form1"><?php echo $solicitudesRC;if ($solicitudesRC=1) {echo " Solicitud pendiente";}else {echo " Solicitudes pendientes";}?> por revisar.</h3>
 						<p>¡Recuerda verificar bien todos los campos!</p>
 						<form action="#" method="POST">
 							<div class="row form-group">
@@ -209,7 +209,7 @@
 					<br><hr><br>		
 				</div>
 
-		<!-- ----------------------------------------------Mostrar los datos de la tabla extendloan en una tabla ----------------------------------------------- -->
+		<!-- ----------------------------------------------Mostrar los datos de la tabla extendloan en una tabla solo de los usuarios para recuperar crédito----------------------------------------------- -->
 
 
 					<div class="col-md-5 col-md-push-1 animate-box">
@@ -223,8 +223,8 @@
 										<td class="titleEdit">Estado</td>
 									</tr>
 								<?php
-								// consultar los usuarios existentes deudores UsuarioDeudor ennla tabla de ampliar prestamo extendloan
-									$consultaUD="SELECT * FROM extendloan WHERE razon_solicitud <> 103";
+								// consultar los usuarios existentes deudores UsuarioDeudor enla tabla de ampliar prestamo extendloan solo para recuperar crédito
+									$consultaUD="SELECT * FROM extendloan WHERE razon_solicitud = 103";
 									$ejecut_consultaUD=mysqli_query($conexion,$consultaUD);
 									
 									while($mostrar_UD=mysqli_fetch_Array($ejecut_consultaUD)){
@@ -310,7 +310,7 @@
 												<div class="alert alert-info">
 													<p>El usuario no se modificó y sigue con el estado actual.</p>
 													<div class="row form-group">
-														<a href="ampliarPrestamo.php" class="btn btn-success btn-outline btn-lg">Vale</a>
+														<a href="recuperarCliente.php" class="btn btn-success btn-outline btn-lg">Vale</a>
 														<a href="javascript:history.go(-2);" class="btn btn-warning btn-outline btn-lg">Retroceder</a>
 													</div>
 												</div>
@@ -342,14 +342,9 @@
 													$consultarAP = mysqli_query($conexion,"SELECT * FROM balance WHERE id_newuser='$id_newuserE'");
 													$mostrar_CAP = mysqli_fetch_array($consultarAP);
 
-													$name=$mostrar_CAP['name'];
-													$address=$mostrar_CAP['address'];
-													$phone_user=$mostrar_CAP['phone_user'];
-													$nit_user=$mostrar_CAP['nit_user'];
 													$id_userRegis=$mostrar_usu['id_user'];
-													$idPayment = uniqid();
+													$formaP = 'Efectivo';                                                    
 													$quantityRes = $mostrar_CAP['total_quantity'];
-													$formaP = 'Efectivo';
 													$cupo = $mostrar_CAP['b_quantity'];
 													$cantidadActualizacion = $mostrar_CAP['quantity_u']+1;
 
@@ -370,37 +365,30 @@
 													}else {
 
 														// Restarle a la deuda y setear todo de nuevo //
-														// insertar datos y registrar el pago
-														$insertPayment = mysqli_query($conexion,"INSERT INTO payment(id_payment,id_newuser,nit_user,name,address,quantity,phone_user,id_userRegis,razon_abono,forma_pago) VALUES('$idPayment','$id_newuserE','$nit_user','$name','$address','$quantityRes','$phone_user','$id_userRegis',$razon_solicitud,'$formaP')");
-
-														if ($insertPayment) {
-
-															// actualizar el nuevo prestamo (Ampliar Nuevo Prestamo) en la tabla balance
-															$updateStatusANP = "UPDATE balance SET b_quantity='$cupoAP', interests='$interests_AP', total_quantity='$quantity_u', update_q = '$cupo', quantity_u = '$cantidadActualizacion', date_renov = NOW() WHERE id_newuser='$id_newuserE'";
-															$ejecut_updateStatusANP = mysqli_query($conexion,$updateStatusANP);
+                                                        // actualizar el nuevo prestamo (Ampliar Nuevo Prestamo) en la tabla balance
+                                                        $updateStatusANP = "UPDATE balance SET b_quantity='$cupoAP', interests='$interests_AP', total_quantity='$quantity_u', update_q = '$cupo', quantity_u = '$cantidadActualizacion', date_renov = NOW() WHERE id_newuser='$id_newuserE'";
+                                                        $ejecut_updateStatusANP = mysqli_query($conexion,$updateStatusANP);
 
 
-															if ($ejecut_updateStatusANP) {	
-																
-																// actualizar el estado de la solicitud
-																$updateStatusEL = mysqli_query($conexion,"UPDATE extendloan SET status='$statusN' WHERE id_extendLoan='$id_extendLoan'");
+                                                        if ($ejecut_updateStatusANP) {	
+                                                            
+                                                            // actualizar el estado de la solicitud
+                                                            $updateStatusEL = mysqli_query($conexion,"UPDATE extendloan SET status='$statusN' WHERE id_extendLoan='$id_extendLoan'");
 
-																?>
-																<div class="alert alert-success text-center mgt-6">
-																	<p><span class="icon-check"> </span>Prestamo Aceptado exitosamente, datos actualizados.</p>
-																	<br>
-																	<a class="volver" href="../vistasnew/ampliarPrestamo.php">OK</a>
-																</div>
-																<?php					
-															}else{
-																?>
-																<div class="alert alert-danger">
-																	<p><span class="icon-cross"> </span>Error al Actualizar el Prestamo. error002.</p><a class="volver" href="javascript:history.go(-2);">Volver</a>
-																</div>
-																<?php		
-															}
-													
-														}
+                                                            ?>
+                                                            <div class="alert alert-success text-center mgt-6">
+                                                                <p><span class="icon-check"> </span>Prestamo Aceptado exitosamente, datos actualizados.</p>
+                                                                <br>
+                                                                <a class="volver" href="../vistasnew/recuperarCliente.php">OK</a>
+                                                            </div>
+                                                            <?php					
+                                                        }else{
+                                                            ?>
+                                                            <div class="alert alert-danger">
+                                                                <p><span class="icon-cross"> </span>Error al Actualizar el Prestamo. error002.</p><a class="volver" href="javascript:history.go(-2);">Volver</a>
+                                                            </div>
+                                                            <?php		
+                                                        }
 													}
 												}
 											}elseif (isset($_POST['btnRAP'])) {
@@ -427,7 +415,7 @@
 								?>
 													<br>
 													<div class="alert alert-success">
-														<p><span class="icon-check"> </span>Estado de la solicitud Actualizada exitosamente. <br><hr><a class="volver" href="../vistasnew/ampliarPrestamo.php">OK</a></p>
+														<p><span class="icon-check"> </span>Estado de la solicitud Actualizada exitosamente. <br><hr><a class="volver" href="../vistasnew/recuperarCliente.php">OK</a></p>
 													</div>
 								<?php		
 													}else{
@@ -458,7 +446,7 @@
 				<?php 
 				
 										// consultar los Datos de los usuarios 
-										$consultaP="SELECT * FROM balance WHERE status = 1 AND total_quantity <> 0";
+										$consultaP="SELECT * FROM balance WHERE status = 1 AND total_quantity = 0";
 										$ejecut_consultaP=mysqli_query($conexion,$consultaP);
 				?>
 									<div class="table-responsive-xl"> 
@@ -485,8 +473,7 @@
 												<td><?php echo formatoAPrecio($mostrarP['b_quantity']); ?></td>
 												<td><?php echo formatoAPrecio($mostrarP['total_quantity']); ?></td>
 												<td>
-													<a title="Ampliar Crédito" href="../php/solitAmpliarP.php?accion=101&id_newuser=<?php echo $mostrarP['id_newuser'];?>"><span style="font-size: 30px;" class="icon-arrow-up"></span></a>
-													<a title="Reducir Crédito" href="../php/solitAmpliarP.php?accion=102&id_newuser=<?php echo $mostrarP['id_newuser'];?>"><span style="font-size: 30px;" class="icon-arrow-down"></span></a>
+													<a title="Recuperar Crédito" href="../php/solitAmpliarP.php?accion=103&id_newuser=<?php echo $mostrarP['id_newuser'];?>"><span style="font-size: 30px;" class="icon-plus"></span></a>
 												</td>
 											</tr>
 									<?php
@@ -508,7 +495,7 @@
 								</tr>
 								<?php
 								// consultar los usuarios existentes deudores UsuarioDeudor
-									$consultaUD="SELECT * FROM extendloan WHERE razon_solicitud <> 103";
+									$consultaUD="SELECT * FROM extendloan WHERE razon_solicitud = 103";
 									$ejecut_consultaUD=mysqli_query($conexion,$consultaUD);
 									
 									while($mostrar_UD=mysqli_fetch_Array($ejecut_consultaUD)){

@@ -59,7 +59,7 @@
             <div class="display-tc">
               <h1 class="animate-box" data-animate-effect="fadeInUp">Tú negocio a otro nivel</h1>
               <h2 class="animate-box" data-animate-effect="fadeInUp">Gestor de control de <em>pagos</em></h2>
-              <p class="animate-box" data-animate-effect="fadeInUp"><a href="#" class="btn btn-white btn-lg btn-outline">Pagos</a></p>
+              <p class="animate-box" data-animate-effect="fadeInUp"><a href="mostrarpagos.php" class="btn btn-white btn-lg btn-outline">Pagos</a></p>
             </div>
           </div>
         </div>

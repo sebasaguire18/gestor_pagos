@@ -7,9 +7,14 @@
 	$solicitudes=mysqli_num_rows($ejecutConsultS);
 
 	// consultar solicitudes de ampliar prestamo
-	$consultAP="SELECT * FROM extendloan WHERE status=0";
+	$consultAP="SELECT * FROM extendloan WHERE status=0 AND razon_solicitud <> 103";
 	$ejecutConsultAP=mysqli_query($conexion,$consultAP);
 	$solicitudesAP=mysqli_num_rows($ejecutConsultAP);
 
-	$solicitudesTotal=$solicitudes+$solicitudesAP;
+	// consultar solicitudes de recuperar cliente
+	$consultRC="SELECT * FROM extendloan WHERE status=0 AND razon_solicitud = 103";
+	$ejecutConsultRC=mysqli_query($conexion,$consultRC);
+	$solicitudesRC=mysqli_num_rows($ejecutConsultRC);
+
+	$solicitudesTotal=$solicitudes+$solicitudesAP+$solicitudesRC;
 ?>
